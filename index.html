@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUMONIX AI | Advanced Intelligent Systems</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ================= THEME VARIABLES ================= */
+        :root {
+            --primary: #00ffff; 
+            --secondary: #3b82f6; 
+            --accent: #10b981; 
+            --bg-dark: #050b14; 
+            --card-dark: #0f172a;
+            --text-light: #f8fafc; 
+            --text-muted: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.05); 
+            --border: rgba(255, 255, 255, 0.1);
+            
+            /* Background Overlay for Parallax */
+            --bg-overlay: rgba(5, 11, 20, 0.85);
+
+            /* Default to Dark Mode */
+            --bg: var(--bg-dark);
+            --card: var(--card-dark);
+            --text: var(--text-light);
+            --border-color: var(--border);
+        }
+
+        [data-theme="light"] {
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #0f172a;
+            --text-muted: #475569;
+            --glass: rgba(0, 0, 0, 0.03);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --bg-overlay: rgba(248, 250, 252, 0.88);
+        }
+
+        /* ================= GLOBAL RESET & PARALLAX BACKGROUND ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; font-family: 'Inter', sans-serif; transition: background-color 0.3s, border-color 0.3s; }
+        
+        body { 
+            background-color: var(--bg); 
+            /* FIXED: More reliable direct AI background image URL */
+            background-image: linear-gradient(var(--bg-overlay), var(--bg-overlay)), url('https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1920');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: var(--text); 
+            overflow-x: hidden; 
+            line-height: 1.6; 
+        }
+
+        /* FIXED: iOS Mobile Fix for background-attachment fixed issue */
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll;
+            }
+        }
+
+        h1, h2, h3, .orbitron { font-family: 'Orbitron', sans-serif; }
+        .highlight { background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ================= NAVIGATION ================= */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 3%; background: rgba(5, 11, 20, 0.85); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); backdrop-filter: blur(15px); }
+        [data-theme="light"] nav { background: rgba(248, 250, 252, 0.9); }
+        
+        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-svg { width: 45px; height: 45px; filter: drop-shadow(0 0 5px var(--primary)); }
+        .brand-text { font-size: 1.4rem; font-weight: 900; color: var(--text); letter-spacing: 1px; }
+
+        .nav-center { display: flex; gap: 12px; list-style: none; }
+        .nav-center a { color: var(--text); text-decoration: none; font-size: 0.85rem; font-weight: 600; padding: 8px 12px; border-radius: 6px; transition: 0.3s; text-transform: uppercase; }
+        .nav-center a:hover { color: var(--primary); background: var(--glass); }
+
+        .nav-controls { display: flex; gap: 10px; align-items: center; }
+        .btn-icon { background: var(--glass); border: 1px solid var(--border-color); color: var(--text); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-icon:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ================= BUTTONS ================= */
+        .btn { padding: 12px 25px; border-radius: 50px; font-weight: 600; text-decoration: none; transition: 0.3s; cursor: pointer; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-gradient { background: linear-gradient(45deg, var(--primary), var(--secondary)); color: #000; font-weight: bold; box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2); }
+        .btn-gradient:hover { box-shadow: 0 8px 25px rgba(0, 255, 255, 0.4); transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text); }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ================= AUTH MODAL ================= */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); }
+        .modal-content { background: var(--card); width: 90%; max-width: 400px; margin: 6% auto; padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border-color); position: relative; }
+        .close-btn { position: absolute; right: 20px; top: 15px; cursor: pointer; font-size: 1.5rem; color: var(--text-muted); }
+        .modal input { width: 100%; padding: 12px; margin-bottom: 15px; background: var(--glass); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text); outline: none; }
+        .modal input:focus { border-color: var(--primary); }
+        .social-login { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .divider { text-align: center; margin: 15px 0; color: var(--text-muted); font-size: 0.8rem; position: relative; }
+        .divider::before, .divider::after { content: ""; position: absolute; top: 50%; width: 40%; height: 1px; background: var(--border-color); }
+        .divider::before { left: 0; } .divider::after { right: 0; }
+
+        /* ================= SECTIONS & CARDS ================= */
+        section { padding: 100px 5% 60px; border-bottom: 1px solid var(--border-color); }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto; }
+
+        .grid { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .card { background: var(--card); padding: 2rem; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.4s; position: relative; overflow: hidden; }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 255, 255, 0.05); }
+        .card-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 1.5rem; filter: brightness(0.85); transition: 0.4s; }
+        .card:hover .card-img { filter: brightness(1); }
+
+        /* ================= HERO SECTION ================= */
+        #home { 
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 8%; 
+            background: transparent; 
+        }
+        .hero-text { flex: 1; text-align: left; }
+        .hero-image { flex: 1; text-align: right; display: flex; justify-content: flex-end;}
+        
+        .hero-image img { max-width: 90%; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,255,255,0.2); animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
+        .hero-title { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 1rem; line-height: 1.2; }
+        .hero-desc { font-size: 1.1rem; color: #cbd5e1; max-width: 600px; margin-bottom: 2.5rem; }
+
+        /* ================= INTERACTIVE DASHBOARD DEMO ================= */
+        .dash-container { background: #0a0e17; border: 1px solid #1e293b; border-radius: 15px; display: flex; height: 550px; overflow: hidden; text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.5); color: #f8fafc; font-family: 'Inter', sans-serif;}
+        .dash-sidebar { width: 250px; background: #111827; padding: 20px; border-right: 1px solid #1e293b; display: flex; flex-direction: column; }
+        .dash-nav-item { padding: 12px 15px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; color: #94a3b8; display: flex; align-items: center; gap: 15px; transition: 0.3s; font-size: 0.9rem;}
+        .dash-nav-item.active { background: rgba(37, 99, 235, 0.2); color: #60a5fa; }
+        .dash-main { flex: 1; padding: 30px; overflow-y: auto; background: #0a0e17; }
+        .dash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .dash-stat { background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; }
+        .dash-view { display: none; animation: fadeIn 0.4s; }
+        .dash-view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ================= REVIEWS SECTION ================= */
+        .review-card { display: flex; flex-direction: column; justify-content: space-between; background: var(--card); }
+        .reviewer-info { display: flex; align-items: center; gap: 15px; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;}
+        .reviewer-info img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+
+        /* ================= OTHERS ================= */
+        .platform-icons { display: flex; justify-content: center; gap: 25px; font-size: 2.5rem; color: var(--text-muted); margin-bottom: 20px; }
+        
+        .pay-icons { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+        .pay-item { background: var(--card); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.1rem; color: var(--text); transition: 0.3s; }
+        .pay-item:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 255, 255, 0.1); }
+        .pay-bkash { color: #e11471; }
+        .pay-nagad { color: #f37021; }
+        .pay-rocket { color: #8c1515; }
+
+        footer { text-align: center; padding: 2rem 5%; background: rgba(2, 4, 10, 0.9); color: var(--text-muted); }
+        [data-theme="light"] footer { background: rgba(226, 232, 240, 0.9); }
+
+        /* Mobile Adjustments */
+        @media (max-width: 1024px) { 
+            .nav-center { display: none; } 
+            #home { flex-direction: column; justify-content: center; text-align: center; padding-top: 120px;}
+            .hero-text { text-align: center; margin-bottom: 40px;}
+            .hero-image { justify-content: center; }
+            .dash-container { flex-direction: column; height: auto; } 
+            .dash-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #1e293b; } 
+            .dash-grid { grid-template-columns: 1fr 1fr; } 
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <nav>
+        <a href="#home" class="brand">
+            <svg viewBox="0 0 100 100" class="logo-svg">
+                <circle cx="50" cy="50" r="46" stroke="#00ffff" stroke-width="3" fill="none" />
+                <path d="M 25 75 L 50 20 L 75 75" stroke="#2979ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <circle cx="50" cy="52" r="8" fill="#00ffff" />
+            </svg>
+            <span class="brand-text orbitron">SUMONIX AI</span>
+        </a>
+        <ul class="nav-center">
+            <li><a href="#home" id="n-home">Home</a></li>
+            <li><a href="#about" id="n-about">About</a></li>
+            <li><a href="#features" id="n-feat">Features</a></li>
+            <li><a href="#demo" id="n-demo">Demo</a></li>
+            <li><a href="#projects" id="n-proj">Projects</a></li>
+            <li><a href="#download" id="n-dl">Download</a></li>
+            <li><a href="#pricing" id="n-price">Pricing</a></li>
+            <li><a href="#payment" id="n-pay">Payment</a></li>
+            <li><a href="#reviews" id="n-rev">Reviews</a></li>
+            <li><a href="#contact" id="n-cont">Contact</a></li>
+        </ul>
+        <div class="nav-controls">
+            <button class="btn-icon" onclick="toggleLang()" id="btnLang">BN</button>
+            <button class="btn-icon" onclick="toggleTheme()" id="btnTheme"><i class="fas fa-sun"></i></button>
+            <button class="btn-icon" onclick="openModal()"><i class="fas fa-user-circle"></i></button>
+        </div>
+    </nav>
+
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="formSignIn">
+                <h2 class="orbitron" id="si-t" style="margin-bottom:20px;">Sign In</h2>
+                <input type="email" placeholder="Email Address" id="si-e">
+                <input type="password" placeholder="Password" id="si-p">
+                <button class="btn btn-gradient" style="width:100%;" id="si-b">Login</button>
+                
+                <div class="divider" id="si-or">OR CONNECT WITH</div>
+                <div class="social-login">
+                    <button class="btn btn-outline" style="width:100%;"><i class="fab fa-google"></i> Google</button>
+                    <button class="btn btn-outline" style="width:100%;"><i class="fab fa-github"></i> GitHub</button>
+                </div>
+
+                <p style="margin-top:20px; font-size:0.9rem; text-align:center;">
+                    <span id="si-txt">Don't have an account?</span> 
+                    <a href="javascript:void(0)" onclick="switchForm()" style="color:var(--primary); font-weight:bold;" id="si-l">Sign Up</a>
+                </p>
+            </div>
+            <div id="formSignUp" style="display:none;">
+                <h2 class="orbitron" id="su-t" style="margin-bottom:20px;">Create Account</h2>
+                <input type="text" placeholder="Full Name" id="su-n">
+                <input type="email" placeholder="Email Address" id="su-e">
+                <input type="password" placeholder="Password" id="su-p">
+                <button class="btn btn-gradient" style="width:100%;" id="su-b">Register</button>
+                
+                <div class="divider" id="su-or">OR CONNECT WITH</div>
+                <div class="social-login">
+                    <button class="btn btn-outline" style="width:100%;"><i class="fab fa-google"></i> Google</button>
+                    <button class="btn btn-outline" style="width:100%;"><i class="fab fa-github"></i> GitHub</button>
+                </div>
+
+                <p style="margin-top:20px; font-size:0.9rem; text-align:center;">
+                    <span id="su-txt">Already have an account?</span> 
+                    <a href="javascript:void(0)" onclick="switchForm()" style="color:var(--primary); font-weight:bold;" id="su-l">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <section id="home">
+        <div class="hero-text">
+            <h1 class="hero-title"><span id="h-t1">SCALABLE</span> <br><span class="highlight" id="h-t2">ARCHITECTURE</span></h1>
+            <p class="hero-desc" id="h-d">Advanced Intelligent Systems & Automation Engineering. Founded and led by Mumain Ahmed, SUMONIX AI delivers secure, automation-first, and enterprise-ready systems.</p>
+            <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                <a href="#download" class="btn btn-gradient" id="h-b1"><i class="fas fa-download"></i> Download App</a>
+                <a href="#demo" class="btn btn-outline" id="h-b2"><i class="fas fa-play"></i> Live Demo</a>
+            </div>
+            <p style="margin-top: 25px; color: var(--accent); font-weight: bold; font-size: 0.95rem; letter-spacing: 1px;"><i class="fas fa-shield-alt"></i> <span id="h-sec">SECURE-BY-DESIGN IMPLEMENTATION</span></p>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800" alt="AI Brain Technology">
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="section-header">
+            <h2><span id="a-t1">LEADERSHIP &</span> <span class="highlight" id="a-t2">AUTHORITY</span></h2>
+            <p id="a-d">Engineering discipline rooted in performance, governance, and production readiness.</p>
+        </div>
+        <div class="grid">
+            <div class="card" style="text-align: center; padding: 2rem;">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=400" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); margin-bottom: 1rem;" alt="Founder">
+                <h3 class="orbitron" style="font-size: 1.3rem;">Mumain Ahmed</h3>
+                <p style="color: var(--primary); font-weight: bold; font-size: 0.9rem; margin-bottom: 10px;" id="a-role">Founder & Chief Architect</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted);" id="a-bio">AI Solutions Architect | Full Stack Python Developer. His expertise spans AI orchestration, backend system architecture, and containerized infrastructure.</p>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 15px;" id="a-p-t"><i class="fas fa-server" style="color:var(--primary);"></i> Infrastructure & Deployment</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 15px;" id="a-p-d1">All SUMONIX AI solutions are containerized and production-aligned. Built upon a deterministic and reproducible environment.</p>
+                <ul style="color: var(--text-muted); font-size: 0.9rem; margin-left: 20px; line-height: 1.8;" id="a-p-d2">
+                    <li>Docker-based service isolation & Linux-native deployment.</li>
+                    <li>Development Environment: Dell Inspiron 15 (8GB RAM, 512GB SSD), Windows 11 Host, WSL2 Ubuntu Linux.</li>
+                    <li>Zero hardcoded credential policy & secure API implementation.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 15px;" id="a-obj-t"><i class="fas fa-bullseye" style="color:var(--primary);"></i> Our Objectives</h3>
+                <ul style="color: var(--text-muted); font-size: 0.9rem; margin-left: 20px; line-height: 1.8;" id="a-obj-d">
+                    <li>Design intelligent systems that scale reliably.</li>
+                    <li>Automate complex business workflows.</li>
+                    <li>Engineer with strict discipline and security.</li>
+                    <li>Provide deterministic AI integration within operational guardrails.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="features">
+        <div class="section-header">
+            <h2><span id="f-t1">AI SYSTEMS</span> <span class="highlight" id="f-t2">FRAMEWORK</span></h2>
+            <p id="f-d">We design intelligent platforms that do not merely function — they perform, scale, and endure.</p>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600" class="card-img" alt="Planner">
+                <h3 id="f1-t"><i class="fas fa-sitemap" style="color: #a78bfa;"></i> Planner Agent</h3>
+                <p id="f1-d" style="color: var(--text-muted); margin-top: 10px; font-size: 0.95rem;">Assists controlled decision-making processes, automates structured workflows, and orchestrates complex task decomposition.</p>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600" class="card-img" alt="Code">
+                <h3 id="f2-t"><i class="fas fa-code" style="color: #60a5fa;"></i> Code Agent</h3>
+                <p id="f2-d" style="color: var(--text-muted); margin-top: 10px; font-size: 0.95rem;">Full Stack Python Engineering. Features explicit memory management controls, input-output schema enforcement, and rapid debugging.</p>
+            </div>
+            <div class="card">
+                <img src="https://images.pexels.com/photos/8386422/pexels-photo-8386422.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img" alt="Automation">
+                <h3 id="f3-t"><i class="fas fa-bolt" style="color: #4ade80;"></i> Automation Agent</h3>
+                <p id="f3-d" style="color: var(--text-muted); margin-top: 10px; font-size: 0.95rem;">Container-first infrastructure execution. Manages CI/CD pipelines with no uncontrolled infrastructure authority.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" style="background: rgba(0,0,0,0.15);">
+        <div class="section-header">
+            <h2><span id="d-t1">INTERACTIVE</span> <span class="highlight" id="d-t2">DASHBOARD</span></h2>
+            <p id="d-d">Live visual replication of the SUMONIX AI environment. Click the menu items below.</p>
+        </div>
+        
+        <div class="dash-container">
+            <div class="dash-sidebar">
+                <div class="orbitron" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 30px; line-height:1.2;">SUMONIX AI<br><small style="font-family:'Inter'; font-size:0.7rem; color:#94a3b8; font-weight:normal;">AI Chat Platform</small></div>
+                
+                <div class="dash-nav-item active" onclick="switchDemo('dash', this)"><i class="fas fa-chart-pie"></i> Dashboard</div>
+                <div class="dash-nav-item" onclick="switchDemo('tasks', this)"><i class="fas fa-list-check"></i> Tasks</div>
+                <div class="dash-nav-item" onclick="switchDemo('agents', this)"><i class="fas fa-robot"></i> Agents</div>
+                
+                <div style="margin-top: auto; display: flex; align-items: center; gap: 10px; padding-top: 15px;">
+                    <div style="width:32px; height:32px; border-radius:50%; background:#2563eb; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:0.8rem; color:white;">M</div>
+                    <div style="line-height:1.2;">
+                        <strong style="font-size:0.85rem; color:white;">Mumain Ahmed</strong><br>
+                        <small style="font-size:0.7rem; color:#94a3b8;">admin</small><br>
+                        <small style="font-size:0.7rem; color:#94a3b8; cursor:pointer;">Sign out</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dash-main">
+                <div id="view-dash" class="dash-view active">
+                    <h2 style="margin-bottom: 5px;">Dashboard</h2>
+                    <p style="color:#94a3b8; font-size:0.9rem; margin-bottom: 25px;">Overview of your AI platform activity</p>
+                    
+                    <div class="dash-grid">
+                        <div class="dash-stat">
+                            <div style="display:flex; justify-content:space-between; color:#94a3b8; font-size:0.85rem;">Total Tasks <i class="fas fa-bars"></i></div>
+                            <div style="font-size: 2.2rem; font-weight: bold; margin: 5px 0;">0</div>
+                            <div style="font-size:0.75rem; color:#64748b;">Last 30 days</div>
+                        </div>
+                        <div class="dash-stat">
+                            <div style="display:flex; justify-content:space-between; color:#94a3b8; font-size:0.85rem;">Success Rate <i class="fas fa-check"></i></div>
+                            <div style="font-size: 2.2rem; font-weight: bold; margin: 5px 0;">0%</div>
+                            <div style="font-size:0.75rem; color:#64748b;">Completion rate</div>
+                        </div>
+                        <div class="dash-stat">
+                            <div style="display:flex; justify-content:space-between; color:#94a3b8; font-size:0.85rem;">Active Agents <i class="fas fa-cog"></i></div>
+                            <div style="font-size: 2.2rem; font-weight: bold; margin: 5px 0;">0</div>
+                            <div style="font-size:0.75rem; color:#64748b;">Currently configured</div>
+                        </div>
+                        <div class="dash-stat">
+                            <div style="display:flex; justify-content:space-between; color:#94a3b8; font-size:0.85rem;">Total Cost <i class="fas fa-dollar-sign"></i></div>
+                            <div style="font-size: 2.2rem; font-weight: bold; margin: 5px 0;">$0.00</div>
+                            <div style="font-size:0.75rem; color:#64748b;">LLM API costs</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display:flex; gap:20px; flex-wrap:wrap;">
+                        <div style="flex:1; min-width:300px; background:#1e293b; border-radius:12px; padding:20px; border:1px solid #334155;">
+                            <h4 style="margin-bottom:15px;">Tasks by Status</h4>
+                            <p style="color:#94a3b8; font-size:0.85rem;">No tasks yet</p>
+                        </div>
+                        <div style="flex:1; min-width:300px; background:#1e293b; border-radius:12px; padding:20px; border:1px solid #334155;">
+                            <h4 style="margin-bottom:15px;">Quick Actions</h4>
+                            <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; margin-bottom:10px; cursor:pointer;">
+                                <div style="font-weight:bold; font-size:0.9rem;">Create New Task</div>
+                                <small style="color:#94a3b8;">Submit a task for AI agent processing</small>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; cursor:pointer;">
+                                <div style="font-weight:bold; font-size:0.9rem;">Configure Agents</div>
+                                <small style="color:#94a3b8;">Set up and manage your AI agents</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-tasks" class="dash-view">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
+                        <div>
+                            <h2 style="margin-bottom: 5px;">Tasks</h2>
+                            <p style="color:#94a3b8; font-size:0.9rem;">Manage AI agent tasks</p>
+                        </div>
+                        <button style="background:#2563eb; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold;">New Task</button>
+                    </div>
+                    <div style="background:#1e293b; border-radius:12px; border:1px solid #334155;">
+                        <div style="padding:15px; border-bottom:1px solid #334155;">
+                            <select style="background:#0f172a; color:white; border:1px solid #334155; padding:8px; border-radius:5px;"><option>All statuses</option></select>
+                        </div>
+                        <table style="width:100%; text-align:left; border-collapse:collapse; font-size:0.9rem;">
+                            <tr style="border-bottom:1px solid #334155; color:#94a3b8;">
+                                <th style="padding:15px;">Title</th><th style="padding:15px;">Status</th><th style="padding:15px;">Priority</th><th style="padding:15px;">Created</th><th style="padding:15px;">Actions</th>
+                            </tr>
+                            <tr><td colspan="5" style="text-align:center; padding:40px; color:#94a3b8;">No tasks found</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="view-agents" class="dash-view">
+                    <h2 style="margin-bottom: 5px;">Agents</h2>
+                    <p style="color:#94a3b8; font-size:0.9rem; margin-bottom: 25px;">Manage your AI agent configurations</p>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+                        <div style="background:#1e293b; border-radius:12px; padding:20px; border:1px solid #334155;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                                <span style="color:#a78bfa; font-size:0.75rem; font-weight:bold; background:rgba(167,139,250,0.1); padding:3px 10px; border-radius:12px;">planner</span>
+                                <span style="font-size:0.75rem; color:#64748b;">0 configured</span>
+                            </div>
+                            <h3 style="margin-bottom:5px;">Planner Agent</h3>
+                            <p style="font-size:0.85rem; color:#94a3b8; line-height:1.5;">Architecture design, task decomposition, and planning.</p>
+                        </div>
+                        <div style="background:#1e293b; border-radius:12px; padding:20px; border:1px solid #334155;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                                <span style="color:#60a5fa; font-size:0.75rem; font-weight:bold; background:rgba(96,165,250,0.1); padding:3px 10px; border-radius:12px;">code</span>
+                                <span style="font-size:0.75rem; color:#64748b;">0 configured</span>
+                            </div>
+                            <h3 style="margin-bottom:5px;">Code Agent</h3>
+                            <p style="font-size:0.85rem; color:#94a3b8; line-height:1.5;">Code generation, review, debugging, and testing.</p>
+                        </div>
+                        <div style="background:#1e293b; border-radius:12px; padding:20px; border:1px solid #334155;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                                <span style="color:#4ade80; font-size:0.75rem; font-weight:bold; background:rgba(74,222,128,0.1); padding:3px 10px; border-radius:12px;">automation</span>
+                                <span style="font-size:0.75rem; color:#64748b;">0 configured</span>
+                            </div>
+                            <h3 style="margin-bottom:5px;">Automation Agent</h3>
+                            <p style="font-size:0.85rem; color:#94a3b8; line-height:1.5;">CI/CD pipelines, deployment, and DevOps automation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="section-header">
+            <h2><span id="p-t1">SUCCESS</span> <span class="highlight" id="p-t2">PROJECTS</span></h2>
+            <p id="p-d">Practical automation applied in active business environments.</p>
+        </div>
+        <div class="grid">
+            <div class="card" style="padding: 1.5rem;">
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=500" class="card-img" style="height: 160px;" alt="POS">
+                <h3 class="orbitron" style="color: var(--primary); margin-bottom: 10px;" id="p1-t">SmartShop POS</h3>
+                <p id="p1-d" style="color: var(--text-muted); font-size: 0.9rem;">Intelligent Retail Automation Platform. Features real-time inventory intelligence, automated sales & invoicing, and role-based authentication framework.</p>
+            </div>
+            <div class="card" style="padding: 1.5rem;">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=500" class="card-img" style="height: 160px;" alt="Website">
+                <h3 class="orbitron" style="color: var(--primary); margin-bottom: 10px;" id="p2-t">ABO Enterprise Website</h3>
+                <p id="p2-d" style="color: var(--text-muted); font-size: 0.9rem;">A modern digital presence showcasing "Simple Solution" capabilities through robust web architecture and responsive design.</p>
+            </div>
+            <div class="card" style="padding: 1.5rem;">
+                <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=500" class="card-img" style="height: 160px;" alt="Police">
+                <h3 class="orbitron" style="color: var(--primary); margin-bottom: 10px;" id="p3-t">BD POLICE Investigator</h3>
+                <p id="p3-d" style="color: var(--text-muted); font-size: 0.9rem;">Multi-Platform Intelligence System (APK/ISO/Web). Processes structured case data, automated FIR assistance, and secure legal reporting.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" style="background: rgba(0,0,0,0.15); text-align: center;">
+        <div class="section-header">
+            <h2><span id="dl-t1">MULTI-PLATFORM</span> <span class="highlight" id="dl-t2">DOWNLOAD</span></h2>
+            <p id="dl-d">Deploy SUMONIX AI natively across your preferred environments.</p>
+        </div>
+        
+        <div class="platform-icons">
+            <i class="fab fa-android" title="APK"></i>
+            <i class="fas fa-compact-disc" title="ISO"></i>
+            <i class="fab fa-linux" title="Linux"></i>
+            <i class="fab fa-apple" title="macOS"></i>
+            <i class="fab fa-windows" title="Windows"></i>
+        </div>
+        
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 30px;">
+            <button class="btn btn-outline"><i class="fab fa-android"></i> Download APK</button>
+            <button class="btn btn-outline"><i class="fas fa-compact-disc"></i> Download ISO</button>
+            <button class="btn btn-outline"><i class="fab fa-linux"></i> Linux (.deb)</button>
+            <button class="btn btn-outline"><i class="fab fa-apple"></i> macOS (.dmg)</button>
+            <button class="btn btn-outline"><i class="fab fa-windows"></i> Windows (.exe)</button>
+        </div>
+    </section>
+
+    <section id="pricing">
+        <div class="section-header">
+            <h2><span id="pr-t1">ENTERPRISE</span> <span class="highlight" id="pr-t2">PRICING</span></h2>
+            <p id="pr-d">International standard pricing tiers. Toggle BN/EN for BDT/USD conversion.</p>
+        </div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+            <div class="card" style="text-align: center; padding: 2rem 1.5rem;">
+                <h3 id="pr1-t">FREE</h3>
+                <div style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0; color: var(--primary);" id="pr1-p">$0</div>
+                <ul style="list-style: none; text-align: left; margin-bottom: 2rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.8;">
+                    <li><i class="fas fa-check text-accent" style="margin-right: 8px;"></i> <span id="pr1-l1">100 AI Tasks</span></li>
+                    <li><i class="fas fa-check text-accent" style="margin-right: 8px;"></i> <span id="pr1-l2">Community Support</span></li>
+                </ul>
+                <button class="btn btn-outline" style="width: 100%;" id="pr1-b">Get Started</button>
+            </div>
+            <div class="card" style="text-align: center; padding: 2rem 1.5rem;">
+                <h3 id="pr2-t">GO</h3>
+                <div style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0; color: var(--primary);" id="pr2-p">$9</div>
+                <ul style="list-style: none; text-align: left; margin-bottom: 2rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.8;">
+                    <li><i class="fas fa-check text-accent" style="margin-right: 8px;"></i> <span id="pr2-l1">500 AI Tasks</span></li>
+                    <li><i class="fas fa-check text-accent" style="margin-right: 8px;"></i> <span id="pr2-l2">Email Support</span></li>
+                </ul>
+                <button class="btn btn-outline" style="width: 100%;" id="pr2-b">Subscribe</button>
+            </div>
+            <div class="card" style="text-align: center; padding: 2rem 1.5rem; border: 2px solid var(--primary); transform: scale(1.05); z-index: 10;">
+                <div style="position: absolute; top: 0; left: 0; right: 0; background: var(--primary); color: #000; font-size: 0.8rem; font-weight: bold; padding: 5px;" id="pr-badge">POPULAR</div>
+                <h3 id="pr3-t" style="margin-top: 15px;">PRO</h3>
+                <div style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0; color: var(--primary);" id="pr3-p">$24</div>
+                <ul style="list-style: none; text-align: left; margin-bottom: 2rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.8;">
+                    <li><i class="fas fa-check text-accent" style="margin-right: 8px;"></i> <span id="pr3-l1">Unlimited AI Tasks</span></li>
+                    <li><i class="fas fa-check text-accent" style="margin-right: 8px;"></i> <span id="pr3-l2">All Core Agents</span></li>
+                </ul>
+                <button class="btn btn-gradient" style="width: 100%;" id="pr3-b">Subscribe</button>
+            </div>
+            <div class="card" style="text-align: center; padding: 2rem 1.5rem;">
+                <h3 id="pr4-t" style="font-size: 1.1rem;">BUSINESS PRO</h3>
+                <div style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0; color: var(--primary);" id="pr4-p">$49</div>
+                <ul style="list-style: none; text-align: left; margin-bottom: 2rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.8;">
+                    <li><i class="fas fa-check text-accent" style="margin-right: 8px;"></i> <span id="pr4-l1">Custom Microservices</span></li>
+                    <li><i class="fas fa-check text-accent" style="margin-right: 8px;"></i> <span id="pr4-l2">24/7 Priority SLA</span></li>
+                </ul>
+                <button class="btn btn-outline" style="width: 100%;" id="pr4-b">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="payment" style="background: rgba(0,0,0,0.15);">
+        <div class="section-header">
+            <h2><span id="pay-t1">SECURE</span> <span class="highlight" id="pay-t2">PAYMENT</span></h2>
+            <p id="pay-d">We accept local Mobile Financial Services and International Cards.</p>
+        </div>
+        <div style="background: var(--glass); border: 1px solid var(--border-color); border-radius: 15px; padding: 30px; text-align: center; max-width: 800px; margin: 0 auto;">
+            <h3 style="margin-bottom: 20px;" id="pay-st"><i class="fas fa-lock" style="color: var(--accent);"></i> 100% Encrypted Transactions</h3>
+            
+            <div class="pay-icons">
+                <div class="pay-item pay-bkash"><i class="fas fa-paper-plane"></i> bKash</div>
+                <div class="pay-item pay-nagad"><i class="fas fa-bolt"></i> Nagad</div>
+                <div class="pay-item pay-rocket"><i class="fas fa-rocket"></i> Rocket</div>
+                <div class="pay-item" style="color: #6366f1;"><i class="fab fa-stripe"></i> Stripe</div>
+                <div class="pay-item" style="color: #3b82f6;"><i class="fab fa-cc-visa"></i> Visa</div>
+                <div class="pay-item" style="color: #ef4444;"><i class="fab fa-cc-mastercard"></i> MasterCard</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews">
+        <div class="section-header">
+            <h2><span id="r-t1">CLIENT</span> <span class="highlight" id="r-t2">REVIEWS</span></h2>
+        </div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+            <div class="card review-card" style="border-left: 4px solid var(--primary);">
+                <i class="fas fa-quote-right" style="font-size: 2rem; color: var(--glass); position: absolute; top: 20px; right: 20px;"></i>
+                <p id="r1-d" style="font-style: italic; margin-bottom: 20px; font-size: 1.05rem;">"SUMONIX AI does not build prototypes — they engineer operational systems. The backend architecture is rock solid and scales effortlessly."</p>
+                <div class="reviewer-info">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100" alt="Tech Client">
+                    <div>
+                        <strong style="color: var(--primary);" id="r1-n">Tech Enterprise Client</strong><br>
+                        <small style="color: var(--text-muted);" id="r1-r">Lead Architect</small>
+                    </div>
+                </div>
+            </div>
+            <div class="card review-card" style="border-left: 4px solid var(--secondary);">
+                <i class="fas fa-quote-right" style="font-size: 2rem; color: var(--glass); position: absolute; top: 20px; right: 20px;"></i>
+                <p id="r2-d" style="font-style: italic; margin-bottom: 20px; font-size: 1.05rem;">"The BD POLICE Investigator platform demonstrates true AI integration with strict formal governance. Outstanding work by Mumain Ahmed."</p>
+                <div class="reviewer-info">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100" alt="Gov Partner">
+                    <div>
+                        <strong style="color: var(--secondary);" id="r2-n">Gov Tech Partner</strong><br>
+                        <small style="color: var(--text-muted);" id="r2-r">Director of Operations</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="section-header">
+            <h2><span id="c-t1">GET IN</span> <span class="highlight" id="c-t2">TOUCH</span></h2>
+            <p id="c-d">Connect with ABO Enterprise for global consultations.</p>
+        </div>
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="card" style="background: transparent; border: none;">
+                <h3 class="orbitron" style="font-size: 1.8rem; margin-bottom: 10px;">ABO Enterprise</h3>
+                <p style="color: var(--primary); font-weight: bold; margin-bottom: 25px;">"Simple solution"</p>
+                
+                <p style="margin-bottom: 15px; font-size: 1.05rem;"><i class="fas fa-user-tie" style="width:30px; color:var(--text-muted);"></i> <span id="c-i1">Mumain Ahmed (Founder & Chief Architect)</span></p>
+                <p style="margin-bottom: 15px; font-size: 1.05rem;"><i class="fas fa-envelope" style="width:30px; color:var(--text-muted);"></i> m.a.sumon92@gmail.com / abo.enterprise@gmail.com</p>
+                <p style="margin-bottom: 15px; font-size: 1.05rem;"><i class="fab fa-whatsapp" style="width:30px; color:var(--text-muted);"></i> +8801825007977 / +8801885411007</p>
+                <p style="margin-bottom: 15px; font-size: 1.05rem;"><i class="fas fa-globe" style="width:30px; color:var(--text-muted);"></i> www.aboenterprise.com</p>
+                
+                <div style="display: flex; gap: 20px; margin-top: 30px; font-size: 1.8rem;">
+                    <a href="https://www.facebook.com/sumon.mumain" target="_blank" style="color:var(--text); transition: 0.3s;" onmouseover="this.style.color='#1877F2'" onmouseout="this.style.color='var(--text)'"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.linkedin.com/in/mumain-ahmed-907057211" target="_blank" style="color:var(--text); transition: 0.3s;" onmouseover="this.style.color='#0A66C2'" onmouseout="this.style.color='var(--text)'"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/masumon" target="_blank" style="color:var(--text); transition: 0.3s;" onmouseover="this.style.color='gray'" onmouseout="this.style.color='var(--text)'"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="card">
+                <form>
+                    <input type="text" id="fm-n" placeholder="Your Name" required style="width:100%; padding:15px; margin-bottom:15px; background:var(--glass); border:1px solid var(--border-color); border-radius:8px; color:var(--text); outline:none;">
+                    <input type="email" id="fm-e" placeholder="Your Email" required style="width:100%; padding:15px; margin-bottom:15px; background:var(--glass); border:1px solid var(--border-color); border-radius:8px; color:var(--text); outline:none;">
+                    <textarea id="fm-m" rows="5" placeholder="Message..." required style="width:100%; padding:15px; margin-bottom:15px; background:var(--glass); border:1px solid var(--border-color); border-radius:8px; color:var(--text); outline:none; resize:vertical;"></textarea>
+                    <button class="btn btn-gradient" style="width: 100%; font-size: 1.1rem;" id="fm-b">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <h3 class="orbitron" style="color: var(--primary); margin-bottom: 10px; font-size: 1.5rem;">SUMONIX AI</h3>
+        <p style="margin-bottom: 5px;">Designed & Engineered by <strong>Mumain Ahmed</strong></p>
+        <p>&copy; 2026 ABO Enterprise. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 1. JS Logic for Interactive Demo
+        function switchDemo(viewId, element) {
+            document.querySelectorAll('.dash-view').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.dash-nav-item').forEach(el => el.classList.remove('active'));
+            let target = document.getElementById('view-' + viewId);
+            if(target) target.classList.add('active');
+            if(element) element.classList.add('active');
+        }
+
+        // 2. JS Logic for Auth Modal
+        const modalEl = document.getElementById('authModal');
+        function openModal() { modalEl.style.display = 'block'; }
+        function closeModal() { modalEl.style.display = 'none'; }
+        function switchForm() {
+            let si = document.getElementById('formSignIn');
+            let su = document.getElementById('formSignUp');
+            if (si.style.display === "none") {
+                si.style.display = "block"; su.style.display = "none";
+            } else {
+                si.style.display = "none"; su.style.display = "block";
+            }
+        }
+        window.onclick = function(e) { if (e.target === modalEl) closeModal(); }
+
+        // 3. JS Logic for Theme Toggle
+        function toggleTheme() {
+            const b = document.body;
+            const isDark = b.getAttribute('data-theme') === 'dark';
+            b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('btnTheme').innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        }
+
+        // 4. JS Logic for BN/EN Translation
+        let isBN = false;
+        
+        const dict = {
+            EN: {
+                btnL: "BN",
+                nav: ["Home", "About", "Features", "Demo", "Projects", "Download", "Pricing", "Payment", "Reviews", "Contact"],
+                siT: "Sign In", siE: "Email Address", siP: "Password", siB: "Login", siOr: "OR CONNECT WITH", siTxt: "Don't have an account?", siL: "Sign Up",
+                suT: "Create Account", suN: "Full Name", suE: "Email Address", suP: "Password", suB: "Register", suOr: "OR CONNECT WITH", suTxt: "Already have an account?", suL: "Sign In",
+                hT1: "SCALABLE", hT2: "ARCHITECTURE", hD: "Advanced Intelligent Systems & Automation Engineering. Founded and led by Mumain Ahmed, SUMONIX AI delivers secure, automation-first, and enterprise-ready systems.", hB1: "<i class='fas fa-download'></i> Download App", hB2: "<i class='fas fa-play'></i> Live Demo", hSec: "SECURE-BY-DESIGN IMPLEMENTATION",
+                aT1: "LEADERSHIP &", aT2: "AUTHORITY", aD: "Engineering discipline rooted in performance, governance, and production readiness.", aRole: "Founder & Chief Architect", aBio: "AI Solutions Architect | Full Stack Python Developer. His expertise spans AI orchestration, backend system architecture, and containerized infrastructure.", aPt: "<i class='fas fa-server' style='color:var(--primary);'></i> Infrastructure & Deployment", aPd1: "All SUMONIX AI solutions are containerized and production-aligned. Built upon a deterministic and reproducible environment.", aPd2: "<li>Docker-based service isolation & Linux-native deployment.</li><li>Development Environment: Dell Inspiron 15 (8GB RAM, 512GB SSD), Windows 11 Host, WSL2 Ubuntu Linux.</li><li>Zero hardcoded credential policy & secure API implementation.</li>", aObjT: "<i class='fas fa-bullseye' style='color:var(--primary);'></i> Our Objectives", aObjD: "<li>Design intelligent systems that scale reliably.</li><li>Automate complex business workflows.</li><li>Engineer with strict discipline and security.</li><li>Provide deterministic AI integration within operational guardrails.</li>",
+                fT1: "AI SYSTEMS", fT2: "FRAMEWORK", fD: "We design intelligent platforms that do not merely function — they perform, scale, and endure.", f1T: "<i class='fas fa-sitemap' style='color: #a78bfa;'></i> Planner Agent", f1D: "Assists controlled decision-making processes, automates structured workflows, and orchestrates complex task decomposition.", f2T: "<i class='fas fa-code' style='color: #60a5fa;'></i> Code Agent", f2D: "Full Stack Python Engineering. Features explicit memory management controls, input-output schema enforcement, and rapid debugging.", f3T: "<i class='fas fa-bolt' style='color: #4ade80;'></i> Automation Agent", f3D: "Container-first infrastructure execution. Manages CI/CD pipelines with no uncontrolled infrastructure authority.",
+                dT1: "INTERACTIVE", dT2: "DASHBOARD", dD: "Live visual replication of the SUMONIX AI environment. Click the menu items below.",
+                pT1: "SUCCESS", pT2: "PROJECTS", pD: "Practical automation applied in active business environments.", p1T: "SmartShop POS", p1D: "Intelligent Retail Automation Platform. Features real-time inventory intelligence, automated sales & invoicing, and role-based authentication framework.", p2T: "ABO Enterprise Website", p2D: "A modern digital presence showcasing \"Simple Solution\" capabilities through robust web architecture and responsive design.", p3T: "BD POLICE Investigator", p3D: "Multi-Platform Intelligence System (APK/ISO/Web). Processes structured case data, automated FIR assistance, and secure legal reporting.",
+                dlT1: "MULTI-PLATFORM", dlT2: "DOWNLOAD", dlD: "Deploy SUMONIX AI natively across your preferred environments.",
+                prT1: "ENTERPRISE", prT2: "PRICING", prD: "International standard pricing tiers. Toggle BN/EN for BDT/USD conversion.", prBadge: "POPULAR",
+                pr1T: "FREE", pr1P: "$0", pr1L1: "100 AI Tasks", pr1L2: "Community Support", pr1B: "Get Started",
+                pr2T: "GO", pr2P: "$9", pr2L1: "500 AI Tasks", pr2L2: "Email Support", pr2B: "Subscribe",
+                pr3T: "PRO", pr3P: "$24", pr3L1: "Unlimited AI Tasks", pr3L2: "All Core Agents", pr3B: "Subscribe",
+                pr4T: "BUSINESS PRO", pr4P: "$49", pr4L1: "Custom Microservices", pr4L2: "24/7 Priority SLA", pr4B: "Contact Sales",
+                payT1: "SECURE", payT2: "PAYMENT", payD: "We accept local Mobile Financial Services and International Cards.", paySt: "<i class='fas fa-lock' style='color: var(--accent);'></i> 100% Encrypted Transactions",
+                rT1: "CLIENT", rT2: "REVIEWS", r1D: "\"SUMONIX AI does not build prototypes — they engineer operational systems. The backend architecture is rock solid and scales effortlessly.\"", r1N: "Tech Enterprise Client", r1R: "Lead Architect", r2D: "\"The BD POLICE Investigator platform demonstrates true AI integration with strict formal governance. Outstanding work by Mumain Ahmed.\"", r2N: "Gov Tech Partner", r2R: "Director of Operations",
+                cT1: "GET IN", cT2: "TOUCH", cD: "Connect with ABO Enterprise for global consultations.", cI1: "Mumain Ahmed (Founder & Chief Architect)", fmN: "Your Name", fmE: "Your Email", fmM: "Message...", fmB: "Send Message"
+            },
+            BN: {
+                btnL: "EN",
+                nav: ["হোম", "সম্পর্কে", "ফিচার", "ডেমো", "প্রজেক্ট", "ডাউনলোড", "প্রাইসিং", "পেমেন্ট", "রিভিউ", "যোগাযোগ"],
+                siT: "লগইন করুন", siE: "ইমেইল অ্যাড্রেস", siP: "পাসওয়ার্ড", siB: "প্রবেশ করুন", siOr: "অথবা", siTxt: "অ্যাকাউন্ট নেই?", siL: "সাইন আপ",
+                suT: "রেজিস্ট্রেশন", suN: "পুরো নাম", suE: "ইমেইল", suP: "পাসওয়ার্ড", suB: "নিবন্ধন করুন", suOr: "অথবা", suTxt: "অ্যাকাউন্ট আছে?", suL: "লগইন",
+                hT1: "স্কেলেবল", hT2: "আর্কিটেকচার", hD: "অ্যাডভান্সড ইন্টেলিজেন্ট সিস্টেম। মুমাইন আহমেদ এর নেতৃত্বে SUMONIX AI নিরাপদ, এন্টারপ্রাইজ-রেডি এবং স্বয়ংক্রিয় সিস্টেম সরবরাহ করে।", hB1: "<i class='fas fa-download'></i> অ্যাপ ডাউনলোড", hB2: "<i class='fas fa-play'></i> লাইভ ডেমো", hSec: "নিরাপদ এন্টারপ্রাইজ গ্রেড প্ল্যাটফর্ম",
+                aT1: "লিডারশিপ ও", aT2: "অথরিটি", aD: "পারফরম্যান্স এবং প্রোডাকশন রেডি সিস্টেম ইঞ্জিনিয়ারিং।", aRole: "ফাউন্ডার এবং চিফ আর্কিটেক্ট", aBio: "এআই সলিউশন আর্কিটেক্ট | ফুল স্ট্যাক পাইথন ডেভেলপার। মাইক্রোসার্ভিস এবং নিরাপদ ইনফ্রাস্ট্রাকচারে অভিজ্ঞ।", aPt: "<i class='fas fa-server' style='color:var(--primary);'></i> ইনফ্রাস্ট্রাকচার ও ডিপ্লয়মেন্ট", aPd1: "আমাদের সব সলিউশন কনটেইনারাইজড এবং প্রোডাকশন-রেডি।", aPd2: "<li>ডকার ভিত্তিক আইসোলেশন এবং লিনাক্স নেটিভ ডিপ্লয়মেন্ট।</li><li>ডেভেলপমেন্ট: Windows 11 (Dell Inspiron), WSL2 Ubuntu Linux.</li><li>জিরো হার্ডকোডেড ক্রেডেনশিয়াল এবং সিকিউর এপিআই।</li>", aObjT: "<i class='fas fa-bullseye' style='color:var(--primary);'></i> আমাদের উদ্দেশ্য", aObjD: "<li>নির্ভরযোগ্য এবং স্কেলেবল ইন্টেলিজেন্ট সিস্টেম ডিজাইন করা।</li><li>জটিল ব্যবসায়িক কাজগুলো স্বয়ংক্রিয় করা।</li><li>কঠোর শৃঙ্খলা এবং নিরাপত্তার সাথে ইঞ্জিনিয়ারিং করা।</li><li>নিরাপদ সীমানার মধ্যে এআই ইন্টিগ্রেশন প্রদান করা।</li>",
+                fT1: "এআই সিস্টেম", fT2: "ফ্রেমওয়ার্ক", fD: "আমরা এমন প্ল্যাটফর্ম বানাই যা শুধু কাজই করে না, বরং স্কেল এবং দীর্ঘস্থায়ী হয়।", f1T: "<i class='fas fa-sitemap' style='color: #a78bfa;'></i> প্ল্যানার এজেন্ট", f1D: "আর্কিটেকচার ডিজাইন, টাস্ক ভাগ করা এবং কন্ট্রোলড ডিসিশন মেকিং এ সাহায্য করে।", f2T: "<i class='fas fa-code' style='color: #60a5fa;'></i> কোড এজেন্ট", f2D: "ফুল স্ট্যাক পাইথন ইঞ্জিনিয়ারিং। দ্রুত কোড তৈরি, ডিবাগিং এবং এন্টারপ্রাইজ লেভেল কোড রিভিউ প্রদান করে।", f3T: "<i class='fas fa-bolt' style='color: #4ade80;'></i> অটোমেশন এজেন্ট", f3D: "CI/CD পাইপলাইন এবং DevOps ম্যানেজমেন্টের মাধ্যমে ইনফ্রাস্ট্রাকচার স্বয়ংক্রিয় করে।",
+                dT1: "ইন্টারেক্টিভ", dT2: "ড্যাশবোর্ড", dD: "SUMONIX AI এর লাইভ ভিজ্যুয়াল রেপ্লিকেশন। নিচের মেনুতে ক্লিক করুন।",
+                pT1: "সফল", pT2: "প্রজেক্ট", pD: "বাস্তব জীবনের ব্যবসায়ে প্রয়োগকৃত অটোমেশন।", p1T: "স্মার্টশপ পিওএস (POS)", p1D: "এবিও এন্টারপ্রাইজের রিটেইল ম্যানেজমেন্টের জন্য একটি আধুনিক মডিউলার সিস্টেম। রিয়েল-টাইম ইনভেন্টরি ও অটোমেটেড সেলস।", p2T: "ABO এন্টারপ্রাইজ ওয়েবসাইট", p2D: "আধুনিক ওয়েব আর্কিটেকচার এবং রেসপন্সিভ ডিজাইনের মাধ্যমে ডিজিটাল উপস্থিতি।", p3T: "বিডি পুলিশ ইনভেস্টিগেটর", p3D: "মাল্টি-প্ল্যাটফর্ম ইন্টেলিজেন্স সিস্টেম (APK/ISO/Web)। স্বয়ংক্রিয় FIR সহায়তা এবং সুরক্ষিত লিগ্যাল রিপোর্টিং।",
+                dlT1: "ক্রস-প্ল্যাটফর্ম", dlT2: "ডাউনলোড", dlD: "যেকোনো অপারেটিং সিস্টেমে নির্বিঘ্নে ডাউনলোড করুন।",
+                prT1: "এন্টারপ্রাইজ", prT2: "প্রাইসিং", prD: "আন্তর্জাতিক মানের প্রাইসিং (টাকা/ডলারে পরিবর্তন করুন)।", prBadge: "জনপ্রিয়",
+                pr1T: "ফ্রি", pr1P: "৳০", pr1L1: "১০০টি এআই টাস্ক", pr1L2: "কমিউনিটি সাপোর্ট", pr1B: "শুরু করুন",
+                pr2T: "গো (GO)", pr2P: "৳৯৯৯", pr2L1: "৫০০টি এআই টাস্ক", pr2L2: "ইমেইল সাপোর্ট", pr2B: "কিনুন",
+                pr3T: "প্রো (PRO)", pr3P: "৳২৪৯৯", pr3L1: "আনলিমিটেড এআই টাস্ক", pr3L2: "সকল কোর এজেন্ট", pr3B: "কিনুন",
+                pr4T: "বিজনেস প্রো", pr4P: "৳৪৯৯৯", pr4L1: "কাস্টম মাইক্রোসার্ভিস", pr4L2: "২৪/৭ প্রায়োরিটি সাপোর্ট", pr4B: "যোগাযোগ করুন",
+                payT1: "নিরাপদ", payT2: "পেমেন্ট", payD: "আমরা মোবাইল ব্যাংকিং এবং আন্তর্জাতিক কার্ড গ্রহণ করি।", paySt: "<i class='fas fa-lock' style='color: var(--accent);'></i> ১০০% এনক্রিপ্টেড লেনদেন",
+                rT1: "গ্রাহক", rT2: "রিভিউ", r1D: "\"SUMONIX AI কোন প্রোটোটাইপ বানায় না, তারা সত্যিকারের সিস্টেম ইঞ্জিনিয়ারিং করে। এর ব্যাকএন্ড আর্কিটেকচার অসাধারণ।\"", r1N: "টেক এন্টারপ্রাইজ ক্লায়েন্ট", r1R: "লিড আর্কিটেক্ট", r2D: "\"বিডি পুলিশ ইনভেস্টিগেটর প্ল্যাটফর্মটি এআই ইন্টিগ্রেশনের একটি অসাধারণ উদাহরণ। মুমাইন আহমেদ দারুণ কাজ করেছেন।\"", r2N: "গভ. টেক পার্টনার", r2R: "অপারেশন ডিরেক্টর",
+                cT1: "যোগাযোগ", cT2: "করুন", cD: "পরামর্শের জন্য এবিও এন্টারপ্রাইজের সাথে যুক্ত হোন।", cI1: "মুমাইন আহমেদ (ফাউন্ডার ও চিফ আর্কিটেক্ট)", fmN: "আপনার নাম", fmE: "আপনার ইমেইল", fmM: "আপনার বার্তা...", fmB: "বার্তা পাঠান"
+            }
+        };
+
+        function setTxt(id, htmlString) {
+            let el = document.getElementById(id);
+            if (el) { el.innerHTML = htmlString; }
+        }
+
+        function toggleLang() {
+            isBN = !isBN; 
+            const d = isBN ? dict.BN : dict.EN;
+            
+            setTxt('btnLang', d.btnL);
+            
+            // Nav 
+            setTxt('n-home', d.nav[0]); setTxt('n-about', d.nav[1]); setTxt('n-feat', d.nav[2]); setTxt('n-demo', d.nav[3]); setTxt('n-proj', d.nav[4]); setTxt('n-dl', d.nav[5]); setTxt('n-price', d.nav[6]); setTxt('n-pay', d.nav[7]); setTxt('n-rev', d.nav[8]); setTxt('n-cont', d.nav[9]);
+            
+            // Auth
+            setTxt('si-t', d.siT); setTxt('si-b', d.siB); setTxt('si-or', d.siOr); setTxt('si-txt', d.siTxt); setTxt('si-l', d.siL);
+            setTxt('su-t', d.suT); setTxt('su-b', d.suB); setTxt('su-or', d.suOr); setTxt('su-txt', d.suTxt); setTxt('su-l', d.suL);
+            let sie = document.getElementById('si-e'); if(sie) sie.placeholder = d.siE;
+            let sip = document.getElementById('si-p'); if(sip) sip.placeholder = d.siP;
+            let sun = document.getElementById('su-n'); if(sun) sun.placeholder = d.suN;
+            let sue = document.getElementById('su-e'); if(sue) sue.placeholder = d.suE;
+            let sup = document.getElementById('su-p'); if(sup) sup.placeholder = d.suP;
+
+            // Hero
+            setTxt('h-t1', d.hT1); setTxt('h-t2', d.hT2); setTxt('h-d', d.hD); setTxt('h-b1', d.hB1); setTxt('h-b2', d.hB2); setTxt('h-sec', d.hSec);
+            
+            // About
+            setTxt('a-t1', d.aT1); setTxt('a-t2', d.aT2); setTxt('a-d', d.aD); setTxt('a-role', d.aRole); setTxt('a-bio', d.aBio); setTxt('a-p-t', d.aPt); setTxt('a-p-d1', d.aPd1); setTxt('a-p-d2', d.aPd2); setTxt('a-obj-t', d.aObjT); setTxt('a-obj-d', d.aObjD);
+            
+            // Features
+            setTxt('f-t1', d.fT1); setTxt('f-t2', d.fT2); setTxt('f-d', d.fD); setTxt('f1-t', d.f1T); setTxt('f1-d', d.f1D); setTxt('f2-t', d.f2T); setTxt('f2-d', d.f2D); setTxt('f3-t', d.f3T); setTxt('f3-d', d.f3D);
+            
+            // Demo
+            setTxt('d-t1', d.dT1); setTxt('d-t2', d.dT2); setTxt('d-d', d.dD);
+            
+            // Projects
+            setTxt('p-t1', d.pT1); setTxt('p-t2', d.pT2); setTxt('p-d', d.pD); setTxt('p1-t', d.p1T); setTxt('p1-d', d.p1D); setTxt('p2-t', d.p2T); setTxt('p2-d', d.p2D); setTxt('p3-t', d.p3T); setTxt('p3-d', d.p3D);
+            
+            // Download
+            setTxt('dl-t1', d.dlT1); setTxt('dl-t2', d.dlT2); setTxt('dl-d', d.dlD);
+            
+            // Pricing
+            setTxt('pr-t1', d.prT1); setTxt('pr-t2', d.prT2); setTxt('pr-d', d.prD); setTxt('pr-badge', d.prBadge);
+            setTxt('pr1-t', d.pr1T); setTxt('pr1-p', d.pr1P); setTxt('pr1-l1', d.pr1L1); setTxt('pr1-l2', d.pr1L2); setTxt('pr1-b', d.pr1B);
+            setTxt('pr2-t', d.pr2T); setTxt('pr2-p', d.pr2P); setTxt('pr2-l1', d.pr2L1); setTxt('pr2-l2', d.pr2L2); setTxt('pr2-b', d.pr2B);
+            setTxt('pr3-t', d.pr3T); setTxt('pr3-p', d.pr3P); setTxt('pr3-l1', d.pr3L1); setTxt('pr3-l2', d.pr3L2); setTxt('pr3-b', d.pr3B);
+            setTxt('pr4-t', d.pr4T); setTxt('pr4-p', d.pr4P); setTxt('pr4-l1', d.pr4L1); setTxt('pr4-l2', d.pr4L2); setTxt('pr4-b', d.pr4B);
+            
+            // Payment
+            setTxt('pay-t1', d.payT1); setTxt('pay-t2', d.payT2); setTxt('pay-d', d.payD); setTxt('pay-st', d.paySt);
+            
+            // Reviews
+            setTxt('r-t1', d.rT1); setTxt('r-t2', d.rT2); setTxt('r1-d', d.r1D); setTxt('r1-n', d.r1N); setTxt('r1-r', d.r1R); setTxt('r2-d', d.r2D); setTxt('r2-n', d.r2N); setTxt('r2-r', d.r2R);
+            
+            // Contact
+            setTxt('c-t1', d.cT1); setTxt('c-t2', d.cT2); setTxt('c-d', d.cD); setTxt('c-i1', d.cI1);
+            let fmn = document.getElementById('fm-n'); if(fmn) fmn.placeholder = d.fmN;
+            let fme = document.getElementById('fm-e'); if(fme) fme.placeholder = d.fmE;
+            let fmm = document.getElementById('fm-m'); if(fmm) fmm.placeholder = d.fmM;
+            setTxt('fm-b', d.fmB);
+        }
+    </script>
+</body>
+</html>
