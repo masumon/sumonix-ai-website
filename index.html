@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SUMONIX AI | Advanced Intelligent Systems</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00ffff">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230E1117'/%3E%3Ccircle cx='50' cy='50' r='46' stroke='%2300ffff' stroke-width='3' fill='none' /%3E%3Cpath d='M 25 75 L 50 20 L 75 75' stroke='%232979ff' stroke-width='12' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='50' cy='52' r='8' fill='%2300ffff' /%3E%3C/svg%3E">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
@@ -151,7 +155,6 @@
         .user { background: var(--secondary); align-self: flex-end; color: white;}
 
         /* ================= SCOPED OS DASHBOARD CSS ================= */
-        /* This prevents conflicts with your main landing page CSS */
         .os-wrapper {
             --os-bg: #0E1117; --os-surface: #161B22; --os-hover: rgba(255, 255, 255, 0.05);
             --os-accent: #00E5FF; --os-text: #E6EDF3; --os-text-sec: #8B949E;
@@ -658,6 +661,7 @@
             </div>
         </div>
     </section>
+
     <section id="projects">
         <div class="section-header">
             <h2><span id="p-t1">SUCCESS</span> <span class="highlight" id="p-t2">PROJECTS</span></h2>
@@ -950,7 +954,6 @@
     <script>
         let osMode = 'Chat';
 
-        // Live Telemetry
         setInterval(() => {
             const cpu = Math.floor(Math.random() * 20) + 5; 
             document.getElementById('os-cpu').innerText = cpu + '%';
@@ -964,7 +967,6 @@
             terminal.scrollTop = terminal.scrollHeight;
         }
 
-        // Sidebar logic
         function osToggle(side) {
             const s = side === 'left' ? document.getElementById('osLeft') : document.getElementById('osRight');
             s.classList.toggle('active');
@@ -1032,6 +1034,16 @@
         document.getElementById('osInput').addEventListener('keydown', e => {
             if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); osRun(); }
         });
+    </script>
+    
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function() {
+                navigator.serviceWorker.register("service-worker.js")
+                .then(res => console.log("SUMONIX AI App Ready to Install!"))
+                .catch(err => console.log("PWA setup failed", err));
+            });
+        }
     </script>
 </body>
 </html>
