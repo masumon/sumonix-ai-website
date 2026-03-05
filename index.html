@@ -100,6 +100,30 @@
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text); }
         .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
+        /* ================= NEW DASHBOARD BUTTON ================= */
+        .sumonix-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 28px;
+            background-color: #00E5FF; /* Cyan কালার */
+            color: #000000;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+            transition: all 0.3s ease;
+            border: 2px solid #00E5FF;
+        }
+        .sumonix-btn:hover {
+            background-color: transparent;
+            color: #00E5FF;
+            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
         /* ================= AUTH MODAL ================= */
         .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); }
         .modal-content { background: var(--card); width: 90%; max-width: 400px; margin: 10% auto; padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border-color); position: relative; }
@@ -319,10 +343,14 @@
         <div class="hero-text">
             <h1 class="hero-title"><span id="h-t1">SCALABLE</span> <br><span class="highlight" id="h-t2">ARCHITECTURE</span></h1>
             <p class="hero-desc" id="h-d">Advanced Intelligent Systems & Automation Engineering. Founded and led by Mumain Ahmed, SUMONIX AI delivers secure, automation-first, and enterprise-ready systems.</p>
+            
             <div style="display:flex; gap:15px; flex-wrap:wrap; justify-content: inherit;">
                 <a href="#download" class="btn btn-gradient" id="h-b1"><i class="fas fa-download"></i> Download App</a>
                 <a href="#demo" class="btn btn-outline" id="h-b2"><i class="fas fa-play"></i> Live Demo</a>
+                
+                <a href="dashboard.html" class="sumonix-btn">🚀 SUMONIX AI DASHBOARD</a>
             </div>
+            
             <p style="margin-top: 25px; color: var(--accent); font-weight: bold; font-size: 0.95rem; letter-spacing: 1px;"><i class="fas fa-shield-alt"></i> <span id="h-sec">SECURE-BY-DESIGN IMPLEMENTATION</span></p>
         </div>
         <div class="hero-image">
@@ -391,6 +419,10 @@
         <div class="section-header">
             <h2><span id="d-t1">INTERACTIVE</span> <span class="highlight" id="d-t2">DASHBOARD</span></h2>
             <p id="d-d">Live visual replication of the SUMONIX AI environment. Click the menu items below.</p>
+            
+            <div style="margin-top: 20px;">
+                <a href="dashboard.html" class="sumonix-btn">🚀 SUMONIX AI DASHBOARD</a>
+            </div>
         </div>
         
         <div class="dash-container">
@@ -789,7 +821,7 @@
                 siT: "লগইন করুন", siE: "ইমেইল অ্যাড্রেস", siP: "পাসওয়ার্ড", siB: "প্রবেশ করুন", siOr: "অথবা", siTxt: "অ্যাকাউন্ট নেই?", siL: "সাইন আপ",
                 suT: "রেজিস্ট্রেশন", suN: "পুরো নাম", suE: "ইমেইল", suP: "পাসওয়ার্ড", suB: "নিবন্ধন করুন", suOr: "অথবা", suTxt: "অ্যাকাউন্ট আছে?", suL: "লগইন",
                 hT1: "স্কেলেবল", hT2: "আর্কিটেকচার", hD: "অ্যাডভান্সড ইন্টেলিজেন্ট সিস্টেম। মুমাইন আহমেদ এর নেতৃত্বে SUMONIX AI নিরাপদ, এন্টারপ্রাইজ-রেডি এবং স্বয়ংক্রিয় সিস্টেম সরবরাহ করে।", hB1: "<i class='fas fa-download'></i> অ্যাপ ডাউনলোড", hB2: "<i class='fas fa-play'></i> লাইভ ডেমো", hSec: "নিরাপদ এন্টারপ্রাইজ গ্রেড প্ল্যাটফর্ম",
-                aT1: "লিডারশিপ ও", aT2: "অথরিটি", aD: "পারফরম্যান্স এবং প্রোডাকশন রেডি সিস্টেম ইঞ্জিনিয়ারিং।", aRole: "ফাউন্ডার এবং চিফ আর্কিটেক্ট", aBio: "এআই সলিউশন আর্কিটেক্ট | ফুল স্ট্যাক পাইথন ডেভেলপার। মাইক্রোসার্ভিস এবং নিরাপদ ইনফ্রাস্ট্রাকচারে অভিজ্ঞ।", aPt: "<i class='fas fa-server' style='color:var(--primary);'></i> ইনফ্রাস্ট্রাকচার ও ডিপ্লয়মেন্ট", aPd1: "আমাদের সব সলিউশন কনটেইনারাইজড এবং প্রোডাকশন-রেডি।", aPd2: "<li>ডকার ভিত্তিক আইসোলেশন এবং লিনাক্স নেটিভ ডিপ্লয়মেন্ট।</li><li>ডেভেলপমেন্ট: Windows 11 (Dell Inspiron), WSL2 Ubuntu Linux.</li><li>জিরো হার্ডকোডেড ক্রেডেনশিয়াল এবং সিকিউর এপিআই।</li>", aObjT: "<i class='fas fa-bullseye' style='color:var(--primary);'></i> আমাদের উদ্দেশ্য", aObjD: "<li>নির্ভরযোগ্য এবং স্কেলেবল ইন্টেলিজেন্ট সিস্টেম ডিজাইন করা।</li><li>জটিল ব্যবসায়িক কাজগুলো স্বয়ংক্রিয় করা।</li><li>কঠোর শৃঙ্খলা এবং নিরাপত্তার সাথে ইঞ্জিনিয়ারিং করা।</li><li>নিরাপদ সীমানার মধ্যে এআই ইন্টিগ্রেশন প্রদান করা।</li>",
+                aT1: "লিডারশিপ ও", aT2: "অথরিটি", aD: "পারফরম্যান্স এবং প্রোডাকশন রেডি সিস্টেম ইঞ্জিনিয়ারিং।", aRole: "ফাউন্ডার এবং চিফ আর্কিটেক্ট", aBio: "এআই সলিউশন আর্কিটেক্ট | ফুল স্ট্যাক পাইথন ডেভেলপার। মাইক্রোসার্ভিস এবং নিরাপদ ইনফ্রাস্ট্রাকচারে অভিজ্ঞ।", aPt: "<i class='fas fa-server' style='color:var(--primary);'></i> ইনফ্রাস্ট্রাকচার ও ডিপ্লয়মেন্ট", aPd1: "আমাদের সব সলিউশন কনটেইনারাইজড এবং প্রোডাকশন-রেডি।", aPd2: "<li>ডকার ভিত্তিক আইসোলেশন এবং লিনাক্স নেটিভ ডিপ্লয়মেন্ট।</li><li>ডেভেলপমেন্ট: Windows 11 (Dell Inspiron), WSL2 Ubuntu Linux.</li><li>জিরো হার্ডকোডেড ক্রেডেনশিয়াল এবং সিকিউর এপিআই।</li>", aObjT: "<i class='fas fa-bullseye' style='color:var(--primary);'></i> আমাদের উদ্দেশ্য", aObjD: "<li>নির্ভরযোগ্য এবং স্কেলেবল ইন্টেলিজেন্ট সিস্টেম ডিজাইন করা।</li><li>জটিল ব্যবসায়িক কাজগুলো স্বয়ংক্রিয় করা।</li><li>কঠোর শৃঙ্খলা এবং নিরাপত্তার সাথে ইঞ্জিনিয়ারিং করা।</li><li>নিরাপদ সীমানার মধ্যে এআই ইন্টিগ্রেশন প্রদান করা।</li>",
                 fT1: "এআই সিস্টেম", fT2: "ফ্রেমওয়ার্ক", fD: "আমরা এমন প্ল্যাটফর্ম বানাই যা শুধু কাজই করে না, বরং স্কেল এবং দীর্ঘস্থায়ী হয়।", f1T: "<i class='fas fa-sitemap' style='color: #a78bfa;'></i> প্ল্যানার এজেন্ট", f1D: "আর্কিটেকচার ডিজাইন, টাস্ক ভাগ করা এবং কন্ট্রোলড ডিসিশন মেকিং এ সাহায্য করে।", f2T: "<i class='fas fa-code' style='color: #60a5fa;'></i> কোড এজেন্ট", f2D: "ফুল স্ট্যাক পাইথন ইঞ্জিনিয়ারিং। দ্রুত কোড তৈরি, ডিবাগিং এবং এন্টারপ্রাইজ লেভেল কোড রিভিউ প্রদান করে।", f3T: "<i class='fas fa-bolt' style='color: #4ade80;'></i> অটোমেশন এজেন্ট", f3D: "CI/CD পাইপলাইন এবং DevOps ম্যানেজমেন্টের মাধ্যমে ইনফ্রাস্ট্রাকচার স্বয়ংক্রিয় করে।",
                 dT1: "ইন্টারেক্টিভ", dT2: "ড্যাশবোর্ড", dD: "SUMONIX AI এর লাইভ ভিজ্যুয়াল রেপ্লিকেশন। নিচের মেনুতে ক্লিক করুন।",
                 pT1: "সফল", pT2: "প্রজেক্ট", pD: "বাস্তব জীবনের ব্যবসায়ে প্রয়োগকৃত অটোমেশন।", p1T: "স্মার্টশপ পিওএস (POS)", p1D: "এবিও এন্টারপ্রাইজের রিটেইল ম্যানেজমেন্টের জন্য একটি আধুনিক মডিউলার সিস্টেম। রিয়েল-টাইম ইনভেন্টরি ও অটোমেটেড সেলস।", p2T: "ABO এন্টারপ্রাইজ ওয়েবসাইট", p2D: "আধুনিক ওয়েব আর্কিটেকচার এবং রেসপন্সিভ ডিজাইনের মাধ্যমে ডিজিটাল উপস্থিতি।", p3T: "বিডি পুলিশ ইনভেস্টিগেটর", p3D: "মাল্টি-প্ল্যাটফর্ম ইন্টেলিজেন্স সিস্টেম (APK/ISO/Web)। স্বয়ংক্রিয় FIR সহায়তা এবং সুরক্ষিত লিগ্যাল রিপোর্টিং।",
