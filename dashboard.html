@@ -3,230 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SUMONIX AI - Enterprise OS Dashboard</title>
+    <title>SUMONIX AI - OS Workspace</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0E1117">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-app: #0E1117;
-            --bg-surface: #161B22;
-            --bg-hover: rgba(255, 255, 255, 0.05);
-            --accent: #00E5FF;
-            --text-primary: #E6EDF3;
-            --text-secondary: #8B949E;
-            --border: rgba(230, 237, 243, 0.15);
-            --danger: #da3633;
-            --success: #3fb950;
-            --warning: #d29922;
-            --glass-bg: rgba(22, 27, 34, 0.85);
+            --bg-app: #0E1117; --bg-surface: #161B22; --bg-hover: rgba(255, 255, 255, 0.05);
+            --accent: #00E5FF; --text-primary: #E6EDF3; --text-secondary: #8B949E;
+            --border: rgba(230, 237, 243, 0.15); --danger: #da3633;
+            --success: #3fb950; --warning: #d29922; --glass-bg: rgba(22, 27, 34, 0.85);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* PERFECT FIT TO SCREEN LOGIC */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-app);
-            color: var(--text-primary);
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            display: flex;
+            font-family: 'Inter', sans-serif; background-color: var(--bg-app);
+            color: var(--text-primary); 
+            width: 100vw; height: 100vh; height: 100dvh; 
+            overflow: hidden; display: flex; flex-direction: column;
         }
 
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--text-secondary); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         h1, h2, h3, h4 { font-weight: 600; }
         .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
 
-        /* ======== LAYOUT STRUCTURE ======== */
-        .left-sidebar { width: 250px; flex-shrink: 0; background: var(--bg-app); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 100; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .main-wrapper { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; height: 100vh; position: relative; background: var(--bg-app); }
-        .right-sidebar { width: 320px; flex-shrink: 0; background: var(--bg-surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; z-index: 100; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .os-core-wrapper { display: flex; flex-grow: 1; height: 100%; overflow: hidden; position: relative; }
+        
+        .left-sidebar { width: 250px; flex-shrink: 0; background: var(--bg-app); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 100; transition: 0.3s; }
+        .main-wrapper { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; height: 100%; position: relative; background: var(--bg-app); }
+        .right-sidebar { width: 320px; flex-shrink: 0; background: var(--bg-surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; z-index: 100; transition: 0.3s; }
 
-        /* Mobile Header */
         .mobile-header { display: none; justify-content: space-between; align-items: center; padding: 0 15px; height: 60px; background: var(--glass-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 50; }
-        .mobile-header .app-title { font-weight: 600; color: var(--accent); font-size: 1.1rem; letter-spacing: 1px; }
-        .icon-btn { background: transparent; border: 1px solid transparent; color: var(--text-primary); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 8px; transition: 0.2s; }
-        .icon-btn:hover { background: var(--bg-hover); border-color: var(--border); color: var(--accent); }
+        .app-title { font-weight: 600; color: var(--accent); font-size: 1.1rem; letter-spacing: 1px; }
+        .icon-btn { background: transparent; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 8px; transition: 0.2s; }
+        .icon-btn:hover { color: var(--accent); }
 
-        /* Sidebar Overlay */
-        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 90; display: none; opacity: 0; transition: opacity 0.3s; }
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 90; display: none; opacity: 0; transition: opacity 0.3s; }
         .sidebar-overlay.active { display: block; opacity: 1; }
 
-        /* ======== LEFT SIDEBAR ======== */
-        .logo { padding: 24px 20px; font-size: 1.2rem; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); letter-spacing: 1px; }
+        .logo { padding: 24px 20px; font-size: 1.2rem; font-weight: 600; color: var(--accent); border-bottom: 1px solid var(--border); letter-spacing: 1px; }
         .section-title { font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1.5px; margin: 25px 0 10px 20px; font-weight: 600; }
-        .nav-menu { list-style: none; padding: 10px; flex-grow: 1; overflow-y: auto; }
+        .nav-menu { list-style: none; padding: 10px; flex-grow: 1; overflow-y: auto; margin:0;}
         .nav-item { padding: 12px 15px; margin-bottom: 4px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-secondary); transition: all 0.2s ease; font-size: 0.95rem; }
         .nav-item:hover { background-color: var(--bg-hover); color: var(--text-primary); }
         .nav-item.active { background-color: rgba(0, 229, 255, 0.1); color: var(--accent); border-left: 3px solid var(--accent); font-weight: 500; }
 
-        /* ======== MAIN WORKSPACE ======== */
-        .top-nav { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 10px; background: var(--glass-bg); backdrop-filter: blur(12px); flex-shrink: 0; overflow-x: auto; white-space: nowrap; }
+        .top-nav { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 10px; background: var(--glass-bg); backdrop-filter: blur(12px); flex-shrink: 0; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .top-nav::-webkit-scrollbar { display: none; }
         .tab { color: var(--text-secondary); cursor: pointer; padding: 8px 14px; border-radius: 6px; transition: 0.2s; font-size: 0.9rem; font-weight: 500; user-select: none; }
         .tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
         .tab.active { color: var(--accent); background: rgba(0, 229, 255, 0.1); box-shadow: inset 0 -2px 0 var(--accent); }
 
-        .view-container { flex-grow: 1; padding: 30px; overflow-y: auto; display: none; flex-direction: column; align-items: center; width: 100%; animation: fadeIn 0.3s ease; }
+        .view-container { flex-grow: 1; padding: 30px 20px; overflow-y: auto; display: none; flex-direction: column; align-items: center; width: 100%; animation: fadeIn 0.3s ease; }
         .view-container.active { display: flex; }
         .view-header { width: 100%; max-width: 950px; padding-bottom: 15px; border-bottom: 1px solid var(--border); margin-bottom: 25px; }
-        .view-header h2 { font-size: 1.5rem; letter-spacing: -0.5px; }
+        .view-header h2 { font-size: 1.5rem; margin:0;}
         .view-header p { color: var(--text-secondary); font-size: 0.9rem; margin-top: 6px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* COMMAND CENTER SPECIFICS */
-        #view-command { padding: 0; display: none; flex-direction: column; height: 100%; }
+        #view-command { padding: 0; height: 100%; display: none; flex-direction: column; justify-content: space-between; align-items: center; }
         #view-command.active { display: flex; }
         
-        .output-area { width: 100%; max-width: 950px; flex-grow: 1; overflow-y: auto; padding: 25px 20px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; margin: 0 auto; }
-        
-        /* Chat Bubbles & Outputs */
-        .msg { max-width: 90%; padding: 16px 20px; border-radius: 12px; font-size: 0.95rem; line-height: 1.5; animation: fadeIn 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1); word-wrap: break-word; }
+        .output-area { width: 100%; max-width: 950px; flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
+        .input-area-wrapper { width: 100%; padding: 15px 20px; background: linear-gradient(to top, var(--bg-app) 80%, transparent); display: flex; justify-content: center; flex-shrink: 0; }
+
+        .msg { max-width: 90%; padding: 15px 20px; border-radius: 12px; font-size: 0.95rem; line-height: 1.5; animation: fadeIn 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1); word-wrap: break-word; }
         .msg.user { background: var(--bg-surface); border: 1px solid var(--border); align-self: flex-end; color: var(--text-primary); border-bottom-right-radius: 4px; }
-        .msg.ai { background: transparent; border-left: 3px solid var(--accent); align-self: flex-start; width: 100%; padding-left: 20px; }
-        .msg.ai .citation { font-size: 0.75rem; color: var(--accent); background: rgba(0, 229, 255, 0.1); padding: 2px 6px; border-radius: 4px; cursor: pointer; margin: 0 3px; transition: 0.2s; }
+        .msg.ai { background: transparent; border-left: 3px solid var(--accent); align-self: flex-start; width: 100%; padding-left: 15px; }
         
-        /* Code & Diagrams */
-        .code-block { background: #0d1117; border: 1px solid var(--border); border-radius: 8px; margin-top: 15px; overflow: hidden; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .code-block { background: #0d1117; border: 1px solid var(--border); border-radius: 8px; margin-top: 15px; overflow: hidden; max-width: 100%; }
         .code-header { background: #161B22; font-size: 0.75rem; color: var(--text-secondary); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        .copy-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: 0.2s; font-size: 0.75rem; }
-        .copy-btn:hover { color: var(--text-primary); background: var(--bg-hover); }
-        .code-block pre { padding: 15px; overflow-x: auto; color: #e6edf3; font-size: 0.85rem; line-height: 1.5; }
+        .code-block pre { padding: 15px; overflow-x: auto; color: #e6edf3; font-size: 0.85rem; line-height: 1.5; margin:0;}
 
-        .workflow-diagram { display: flex; align-items: center; gap: 15px; margin-top: 15px; padding: 20px; background: var(--bg-surface); border-radius: 8px; border: 1px dashed rgba(0, 229, 255, 0.3); overflow-x: auto; }
-        .wf-node { background: var(--bg-app); border: 1px solid var(--accent); padding: 10px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .workflow-diagram { display: flex; align-items: center; gap: 10px; margin-top: 15px; padding: 15px; background: var(--bg-surface); border-radius: 8px; border: 1px dashed rgba(0, 229, 255, 0.3); overflow-x: auto; white-space: nowrap; }
+        .wf-node { background: var(--bg-app); border: 1px solid var(--accent); padding: 10px 15px; border-radius: 8px; font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 8px; }
 
-        /* File Explorer View */
-        .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; width: 100%; }
-        .file-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 15px; text-align: center; cursor: pointer; transition: 0.2s; }
-        .file-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-        .file-card .icon { font-size: 2.5rem; margin-bottom: 10px; }
-        .file-card h4 { font-size: 0.85rem; color: var(--text-primary); margin-bottom: 5px; word-break: break-all; }
-        .file-card p { font-size: 0.7rem; color: var(--text-secondary); }
-
-        /* Omnibox */
-        .input-area-wrapper { width: 100%; max-width: 950px; padding: 15px 20px 25px; display: flex; justify-content: center; flex-shrink: 0; margin: 0 auto; background: var(--bg-app); z-index: 10;}
-        .omnibox { background-color: var(--bg-surface); border: 1px solid rgba(230, 237, 243, 0.2); border-radius: 12px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; transition: 0.3s; }
+        .omnibox { background-color: var(--bg-surface); border: 1px solid rgba(230, 237, 243, 0.2); border-radius: 12px; width: 100%; max-width: 950px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; transition:0.3s;}
         .omnibox:focus-within { border-color: var(--accent); box-shadow: 0 0 25px rgba(0, 229, 255, 0.15); }
-        .omnibox textarea { width: 100%; background: transparent; border: none; color: var(--text-primary); padding: 20px; font-size: 1rem; resize: none; outline: none; font-family: inherit; line-height: 1.5; max-height: 150px; }
+        .omnibox textarea { width: 100%; background: transparent; border: none; color: var(--text-primary); padding: 15px 20px; font-size: 1rem; resize: none; outline: none; font-family: inherit; line-height: 1.5; max-height: 150px; }
         
-        .omnibox-footer { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.2); border-radius: 0 0 12px 12px; flex-wrap: wrap; gap: 10px; }
+        .omnibox-footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.2); border-radius: 0 0 12px 12px; flex-wrap: wrap; gap: 10px; }
         .attachments { display: flex; gap: 8px; flex-wrap: nowrap; overflow-x: auto; align-items: center; flex-grow: 1; padding-bottom: 2px; }
         .attachments::-webkit-scrollbar { display: none; }
         
-        .attach-btn { background: var(--bg-app); border: 1px solid var(--border); color: var(--text-secondary); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 500; transition: 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .attach-btn { background: var(--bg-app); border: 1px solid var(--border); color: var(--text-secondary); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 500; transition: 0.2s; white-space: nowrap; display: flex; align-items:center; gap:5px;}
         .attach-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
-        .file-badge { background: rgba(0, 229, 255, 0.1); color: var(--accent); border: 1px solid rgba(0, 229, 255, 0.3); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; margin: 0 15px 10px; white-space: nowrap; width: max-content;}
-        .file-badge span { cursor: pointer; background: rgba(0, 229, 255, 0.2); border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
         
-        .execute-btn { background-color: var(--accent); color: #000; border: none; padding: 10px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; white-space: nowrap; box-shadow: 0 4px 10px rgba(0, 229, 255, 0.2); }
+        .execute-btn { background-color: var(--accent); color: #000; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; white-space: nowrap; box-shadow: 0 4px 10px rgba(0, 229, 255, 0.2);}
         .execute-btn:hover { box-shadow: 0 6px 20px rgba(0, 229, 255, 0.4); transform: translateY(-2px); background-color: #33eaff; }
-        select.model-select { background: var(--bg-app); color: var(--text-primary); border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; font-size: 0.85rem; outline: none; cursor: pointer; }
+        select.model-select { background: var(--bg-app); color: var(--text-primary); border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; font-size: 0.85rem; outline: none; }
 
-        /* Pipeline */
-        .pipeline { width: 100%; background: var(--bg-surface); border: 1px solid var(--accent); border-radius: 12px; padding: 25px; display: none; margin-bottom: 10px; }
-        .pipeline h3 { color: var(--accent); font-size: 0.9rem; margin-bottom: 20px; }
-        .pipeline-steps { display: flex; justify-content: space-between; position: relative; }
-        .pipeline-steps::before { content: ''; position: absolute; top: 16px; left: 30px; right: 30px; height: 2px; background: var(--border); z-index: 1; }
-        .step { position: relative; z-index: 2; background: var(--bg-surface); padding: 0 10px; display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--text-secondary); font-size: 0.8rem; font-weight: 500; transition: 0.3s; flex: 1;}
-        .step-icon { width: 34px; height: 34px; border-radius: 50%; background: var(--bg-app); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: 0.3s; }
-        .step.active .step-icon { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 15px var(--accent); transform: scale(1.1); }
+        .pipeline { width: 100%; background: var(--bg-surface); border: 1px solid var(--accent); border-radius: 12px; padding: 20px; display: none; margin-bottom: 20px; }
+        .pipeline-steps { display: flex; justify-content: space-between; position: relative; margin-top: 15px; flex-wrap: wrap; gap: 10px; }
+        .step { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.8rem; font-weight: 500; flex: 1; min-width: 60px; }
+        .step-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--bg-app); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .step.active .step-icon { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px var(--accent); }
         .step.done .step-icon { border-color: var(--success); background: var(--success); color: #000; }
 
-        /* ======== OTHER VIEWS COMPONENTS ======== */
-        .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; width: 100%; max-width: 950px; }
-        .card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .card:hover { border-color: var(--accent); transform: translateY(-3px); }
-        .card h4 { color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; font-size: 1.05rem; }
-        .status-dot { width: 10px; height: 10px; background: var(--success); border-radius: 50%; display: inline-block; box-shadow: 0 0 10px var(--success); }
-        .status-dot.offline { background: var(--danger); box-shadow: 0 0 10px var(--danger); }
-        .status-dot.idle { background: var(--warning); box-shadow: 0 0 10px var(--warning); }
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; width: 100%; max-width: 950px; }
+        .card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+        .card h4 { display: flex; align-items: center; gap: 8px; font-size: 1rem; margin-bottom: 10px; }
+        .status-dot { width: 10px; height: 10px; background: var(--success); border-radius: 50%; display: inline-block; }
 
-        .table-responsive { width: 100%; max-width: 950px; overflow-x: auto; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border); }
-        .data-table { width: 100%; border-collapse: collapse; min-width: 650px; }
-        .data-table th, .data-table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        .data-table th { background: rgba(0,0,0,0.4); color: var(--text-secondary); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
-        .data-table tr:hover td { background: var(--bg-hover); }
+        .table-responsive { width: 100%; max-width: 950px; overflow-x: auto; background: var(--bg-surface); border-radius: 10px; border: 1px solid var(--border); }
+        .data-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        .data-table th { background: rgba(0,0,0,0.4); color: var(--text-secondary); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
 
-        .kanban-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; width: 100%; max-width: 950px; }
-        .kanban-col { background: var(--bg-surface); border-radius: 12px; padding: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 15px; }
-        .kanban-col h3 { font-size: 0.85rem; color: var(--text-primary); text-transform: uppercase; padding-bottom: 15px; border-bottom: 2px solid var(--border); display: flex; justify-content: space-between; }
-        .kanban-task { background: var(--bg-app); border: 1px solid var(--border); padding: 18px; border-radius: 8px; font-size: 0.9rem; line-height: 1.4; transition: 0.2s; cursor: pointer;}
-        .kanban-task:hover { border-color: var(--accent); }
-        .task-tag { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; margin-top: 12px; background: rgba(0, 229, 255, 0.1); color: var(--accent); font-weight: 500; }
+        .kanban-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; width: 100%; max-width: 1000px; }
+        .kanban-col { background: var(--bg-surface); border-radius: 10px; padding: 15px; border: 1px solid var(--border); }
+        .kanban-task { background: var(--bg-app); border: 1px solid var(--border); padding: 15px; border-radius: 8px; font-size: 0.85rem; margin-top: 15px; }
 
-        .settings-group { width: 100%; max-width: 950px; background: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border); padding: 10px 25px; margin-bottom: 25px; }
-        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border); }
-        .setting-item:last-child { border-bottom: none; }
-        .setting-info h4 { font-size: 1rem; margin-bottom: 6px; }
-        .setting-info p { font-size: 0.85rem; color: var(--text-secondary); max-width: 600px; line-height: 1.5; }
+        .widget { padding: 20px; border-bottom: 1px solid var(--border); }
+        .widget h3 { font-size: 0.85rem; color: var(--text-primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .metric-card { background: var(--bg-app); padding: 15px 10px; border-radius: 8px; border: 1px solid var(--border); text-align: center; }
+        .metric-value { font-size: 1.2rem; color: var(--accent); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+        .metric-label { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; margin-top: 5px; }
         
-        .switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0;}
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #30363d; transition: .4s; border-radius: 24px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--accent); }
-        input:checked + .slider:before { transform: translateX(20px); background-color: #0E1117; }
-
-        /* ======== RIGHT SIDEBAR (Widgets) ======== */
-        .widget { padding: 25px 20px; border-bottom: 1px solid var(--border); }
-        .widget h3 { font-size: 0.85rem; color: var(--text-primary); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .terminal { background: #050505; padding: 15px; border-radius: 8px; border: 1px solid #30363d; flex-grow: 1; min-height: 150px; overflow-y: auto; color: #a5d6ff; font-size: 0.8rem; }
+        .log-line { margin-bottom: 5px; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
         
-        .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .metric-card { background: var(--bg-app); padding: 15px; border-radius: 10px; border: 1px solid var(--border); text-align: center; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); }
-        .metric-value { font-size: 1.5rem; color: var(--accent); font-weight: 600; font-family: 'JetBrains Mono', monospace; transition: 0.3s; }
-        .metric-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; margin-top: 5px; }
-        
-        .approval-card { background: rgba(210, 153, 34, 0.08); border: 1px solid rgba(210, 153, 34, 0.4); border-radius: 10px; padding: 20px; transition: 0.3s; }
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-sm { flex: 1; padding: 10px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: 0.2s; }
-        .btn-approve { background: var(--success); color: #fff; }
-        .btn-reject { background: rgba(218, 54, 51, 0.1); border: 1px solid var(--danger); color: #ff7b72; }
-        .btn-approve:hover { background: #2ea043; transform: translateY(-1px); }
-        .btn-reject:hover { background: var(--danger); color: #fff; transform: translateY(-1px); }
-
-        .terminal { background: #050505; padding: 15px; border-radius: 10px; border: 1px solid #30363d; height: calc(100vh - 450px); min-height: 200px; overflow-y: auto; color: #a5d6ff; font-size: 0.8rem; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
-        .log-line { margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; word-break: break-all; line-height: 1.4; }
-        .log-time { color: #8B949E; margin-right: 8px; }
-
-        /* Modals */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: 0.3s; }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-box { background: var(--bg-surface); border: 1px solid var(--border); padding: 35px; border-radius: 16px; width: 90%; max-width: 450px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); transform: translateY(20px); transition: 0.3s; }
-        .modal-overlay.active .modal-box { transform: translateY(0); }
-        .modal-box h3 { margin-bottom: 15px; color: var(--accent); font-size: 1.3rem; }
-        .modal-box input { width: 100%; padding: 14px 15px; background: var(--bg-app); border: 1px solid var(--border); color: white; border-radius: 8px; margin: 20px 0; outline: none; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
-        .modal-box input:focus { border-color: var(--accent); }
-
-        /* ======== RESPONSIVE MEDIA QUERIES ======== */
         @media (max-width: 1100px) {
-            .right-sidebar { position: fixed; right: 0; transform: translateX(100%); height: 100vh; }
+            .right-sidebar { position: fixed; right: 0; transform: translateX(100%); height: 100%; }
             .right-sidebar.active { transform: translateX(0); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
             .mobile-header { display: flex; } 
             .mobile-header .left-menu-btn { display: none; }
-            .terminal { height: calc(100vh - 350px); }
         }
 
         @media (max-width: 768px) {
-            .left-sidebar { position: fixed; left: 0; transform: translateX(-100%); height: 100vh; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
+            .left-sidebar { position: fixed; left: 0; transform: translateX(-100%); height: 100%; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
             .left-sidebar.active { transform: translateX(0); }
-            .mobile-header .left-menu-btn { display: flex; } 
             
-            .view-container { padding: 20px 15px; }
-            .output-area { padding: 15px; }
+            .mobile-header .left-menu-btn { display: flex; } 
+            .view-container { padding: 15px; }
             
             .omnibox-footer { flex-direction: column; align-items: stretch; }
-            .execute-btn { width: 100%; padding: 12px; margin-top: 5px; }
+            .attachments { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 5px; }
+            .execute-btn { width: 100%; padding: 12px; margin-top: 10px;}
             
-            .msg { max-width: 100%; padding: 15px; font-size: 0.9rem; }
-            .pipeline-steps::before { display: none; } /* Hide line on very small screens */
-            
-            .setting-item { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .terminal { height: calc(100vh - 300px); }
+            .msg { max-width: 95%; padding: 12px 15px; font-size: 0.9rem; }
+            .pipeline-steps::before { display: none; }
         }
     </style>
 </head>
@@ -240,289 +166,147 @@
 
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeAllSidebars()"></div>
 
-    <aside class="left-sidebar" id="leftSidebar">
-        <div class="logo">◉ SUMONIX AI</div>
-        
-        <div class="section-title">Workspace</div>
-        <ul class="nav-menu">
-            <li class="nav-item active" onclick="switchSidebar('view-command', this)">⌘ Command Center</li>
-            <li class="nav-item" onclick="switchSidebar('view-agents', this)">🧠 AI Agents</li>
-            <li class="nav-item" onclick="switchSidebar('view-projects', this)">📁 Projects</li>
-            <li class="nav-item" onclick="switchSidebar('view-tasks', this)">⚡ Active Tasks</li>
-            <li class="nav-item" onclick="switchSidebar('view-artifacts', this)">📦 Artifacts</li>
-        </ul>
-
-        <div class="section-title">Administration</div>
-        <ul class="nav-menu">
-            <li class="nav-item" onclick="switchSidebar('view-providers', this)">🔑 API Providers</li>
-            <li class="nav-item" onclick="switchSidebar('view-audit', this)">📜 Audit Logs</li>
-            <li class="nav-item" onclick="switchSidebar('view-settings', this)">⚙️ Settings</li>
-        </ul>
-    </aside>
-
-    <main class="main-wrapper">
-        
-        <div class="top-nav" id="topNav">
-            <div class="tab active" onclick="switchTopTab(this, 'Chat')">✦ Chat</div>
-            <div class="tab" onclick="switchTopTab(this, 'Research')">🔬 Research</div>
-            <div class="tab" onclick="switchTopTab(this, 'Build')">🏗️ Build</div>
-            <div class="tab" onclick="switchTopTab(this, 'Automate')">⚡ Automate</div>
-            <div class="tab" onclick="switchTopTab(this, 'Files')">📂 Files</div>
-        </div>
-
-        <div class="view-container active" id="view-command">
+    <div class="os-core-wrapper">
+        <aside class="left-sidebar" id="leftSidebar">
+            <div class="logo">◉ SUMONIX AI</div>
             
-            <div class="output-area" id="chatOutput">
-                <div class="msg ai">
-                    <strong>SUMONIX AI</strong><br><br>
-                    Secure Enterprise OS initialized. Connected to local GPU and cloud environments. How can I assist you today?
-                </div>
-                
-                <div class="pipeline" id="pipelineBox">
-                    <h3><span style="animation: pulse 1.5s infinite;">◉</span> Executing Agent Pipeline...</h3>
-                    <div class="pipeline-steps">
-                        <div class="step" id="step-planner"><div class="step-icon">1</div><span>Planner</span></div>
-                        <div class="step" id="step-researcher"><div class="step-icon">2</div><span>Researcher</span></div>
-                        <div class="step" id="step-builder"><div class="step-icon">3</div><span>Builder</span></div>
-                        <div class="step" id="step-verifier"><div class="step-icon">4</div><span>Verifier</span></div>
+            <div class="section-title">Workspace</div>
+            <ul class="nav-menu">
+                <li class="nav-item active" onclick="switchSidebar('view-command', this)">⌘ Command Center</li>
+                <li class="nav-item" onclick="switchSidebar('view-agents', this)">🧠 AI Agents</li>
+                <li class="nav-item" onclick="switchSidebar('view-projects', this)">📁 Projects</li>
+                <li class="nav-item" onclick="switchSidebar('view-tasks', this)">⚡ Active Tasks</li>
+                <li class="nav-item" onclick="switchSidebar('view-artifacts', this)">📦 Artifacts</li>
+            </ul>
+
+            <div class="section-title">Administration</div>
+            <ul class="nav-menu">
+                <li class="nav-item" onclick="switchSidebar('view-providers', this)">🔑 API Providers</li>
+                <li class="nav-item" onclick="switchSidebar('view-audit', this)">📜 Audit Logs</li>
+            </ul>
+        </aside>
+
+        <main class="main-wrapper">
+            <div class="top-nav" id="topNav">
+                <div class="tab active" onclick="switchTopTab(this, 'Chat')">✦ Chat</div>
+                <div class="tab" onclick="switchTopTab(this, 'Research')">🔬 Research</div>
+                <div class="tab" onclick="switchTopTab(this, 'Build')">🏗️ Build</div>
+                <div class="tab" onclick="switchTopTab(this, 'Automate')">⚡ Automate</div>
+            </div>
+
+            <div class="view-container active" id="view-command">
+                <div class="output-area" id="chatOutput">
+                    <div class="msg ai">
+                        <strong>SUMONIX AI</strong><br><br>
+                        Secure OS initialized. Ready for your enterprise workflow.
+                    </div>
+                    
+                    <div class="pipeline" id="pipelineBox">
+                        <h3 style="color:var(--accent); font-size:0.9rem; margin-bottom:15px;">◉ Processing Request...</h3>
+                        <div class="pipeline-steps">
+                            <div class="step" id="step-planner"><div class="step-icon">1</div><span>Plan</span></div>
+                            <div class="step" id="step-researcher"><div class="step-icon">2</div><span>Search</span></div>
+                            <div class="step" id="step-builder"><div class="step-icon">3</div><span>Build</span></div>
+                            <div class="step" id="step-verifier"><div class="step-icon">4</div><span>Verify</span></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="output-area" id="filesOutput" style="display:none; justify-content: flex-start;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2>📂 Workspace Files</h2>
-                    <button class="attach-btn" style="color:var(--accent); border-color:var(--accent)">+ New</button>
-                </div>
-                <div class="file-grid">
-                    <div class="file-card"><div class="icon">📁</div><h4>backend_api</h4><p>Directory • 24 items</p></div>
-                    <div class="file-card"><div class="icon">📁</div><h4>n8n_workflows</h4><p>Directory • 3 items</p></div>
-                    <div class="file-card"><div class="icon">📄</div><h4>server_config.yaml</h4><p>YAML • 12 KB</p></div>
-                    <div class="file-card"><div class="icon">🖼️</div><h4>architecture.png</h4><p>PNG • 1.4 MB</p></div>
-                    <div class="file-card"><div class="icon">👨‍💻</div><h4>deploy_script.sh</h4><p>Shell • 4 KB</p></div>
-                    <div class="file-card"><div class="icon">📊</div><h4>Q3_financials.csv</h4><p>CSV • 2.1 MB</p></div>
-                </div>
-            </div>
-
-            <div class="input-area-wrapper" id="omniboxWrapper">
-                <div style="width: 100%;">
-                    <div id="attached-files"></div>
+                <div class="input-area-wrapper">
                     <div class="omnibox">
-                        <textarea id="promptInput" rows="1" placeholder="[Chat Mode] Type your command here..."></textarea>
-                        
+                        <textarea id="promptInput" rows="1" placeholder="[Chat Mode] Enter command..."></textarea>
                         <div class="omnibox-footer">
                             <div class="attachments">
-                                <button class="attach-btn" onclick="attachFile('PDF', '📄')">📎 PDF</button>
-                                <button class="attach-btn" onclick="attachFile('Image', '🖼️')">🖼️ Img</button>
-                                <button class="attach-btn" onclick="attachFile('Code', '👨‍💻')">👨‍💻 Code</button>
+                                <button class="attach-btn" onclick="alert('File attached')">📎 Doc</button>
+                                <button class="attach-btn" onclick="alert('Image attached')">🖼️ Img</button>
                                 <select class="model-select" id="modelSelector">
-                                    <optgroup label="Local (Ollama)">
-                                        <option value="qwen">Qwen 2.5 (Fast)</option>
-                                        <option value="deepseek">DeepSeek Coder</option>
-                                    </optgroup>
-                                    <optgroup label="Cloud">
-                                        <option value="gpt4o">GPT-4o</option>
-                                        <option value="claude">Claude 3.5</option>
-                                    </optgroup>
+                                    <option value="qwen">Qwen 2.5 (Local)</option>
+                                    <option value="gpt4o">GPT-4o (Cloud)</option>
                                 </select>
                             </div>
-                            <button class="execute-btn" onclick="executeTask()">⚡ RUN TASK</button>
+                            <button class="execute-btn" onclick="executeTask()">⚡ RUN</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="view-container" id="view-agents">
-            <div class="view-header"><h2>🧠 AI Agents Overview</h2><p>Monitor autonomous agents operating within your environment.</p></div>
-            <div class="grid-cards">
-                <div class="card"><h4><span class="status-dot idle"></span> Planner Agent</h4><p>Breaks down complex prompts.</p><br><p class="mono" style="color:var(--text-secondary)">Status: Standing by</p></div>
-                <div class="card"><h4><span class="status-dot"></span> Research Agent</h4><p>Web scraping and Perplexity search.</p><br><p class="mono" style="color:var(--text-secondary)">Status: Active Listening</p></div>
-                <div class="card"><h4><span class="status-dot"></span> Builder Agent</h4><p>Generates production-ready code.</p><br><p class="mono" style="color:var(--text-secondary)">Model: DeepSeek Coder</p></div>
-                <div class="card"><h4><span class="status-dot offline"></span> Verifier Agent</h4><p>Tests logic and security.</p><br><p class="mono" style="color:var(--danger)">Status: Offline (Patching)</p></div>
-            </div>
-        </div>
-
-        <div class="view-container" id="view-projects">
-            <div class="view-header"><h2>📁 Active Projects</h2><p>Workspaces generated by AI or synced from repositories.</p></div>
-            <div class="grid-cards">
-                <div class="card"><h4>ecommerce_backend</h4><p class="mono" style="font-size:0.75rem; background:#0E1117; padding:5px; border-radius:4px; margin-top:10px;">Node.js, Express, MongoDB</p><p style="margin-top:15px; color:var(--text-secondary); font-size:0.8rem;">Last modified: 2 mins ago</p></div>
-                <div class="card"><h4>marketing_auto_n8n</h4><p class="mono" style="font-size:0.75rem; background:#0E1117; padding:5px; border-radius:4px; margin-top:10px;">Python, Webhooks, APIs</p><p style="margin-top:15px; color:var(--text-secondary); font-size:0.8rem;">Last modified: 5 hours ago</p></div>
-                <div class="card"><h4>finance_dashboard</h4><p class="mono" style="font-size:0.75rem; background:#0E1117; padding:5px; border-radius:4px; margin-top:10px;">React, TailwindCSS</p><p style="margin-top:15px; color:var(--text-secondary); font-size:0.8rem;">Last modified: 2 days ago</p></div>
-            </div>
-        </div>
-
-        <div class="view-container" id="view-tasks">
-            <div class="view-header"><h2>⚡ Automated Workflow Queue</h2><p>Agent task execution pipeline and manual override jobs.</p></div>
-            <div class="kanban-board">
-                <div class="kanban-col">
-                    <h3>To Do <span style="background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:10px;">2</span></h3>
-                    <div class="kanban-task">Refactor login logic to JWT.<br><span class="task-tag">Builder Agent</span></div>
-                    <div class="kanban-task">Scrape competitor pricing.<br><span class="task-tag">Research Agent</span></div>
-                </div>
-                <div class="kanban-col">
-                    <h3>In Progress <span style="background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:10px;">1</span></h3>
-                    <div class="kanban-task" style="border-left: 3px solid var(--accent);">Deploying DB Migration.<br><span class="task-tag" style="background:rgba(218, 54, 51, 0.1); color:var(--danger)">System</span></div>
-                </div>
-                <div class="kanban-col">
-                    <h3>Done <span style="background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:10px;">1</span></h3>
-                    <div class="kanban-task" style="opacity: 0.6;">Initialize workspace.<br><span class="task-tag" style="background:rgba(63, 185, 80, 0.1); color:var(--success)">Planner</span></div>
+            <div class="view-container" id="view-agents">
+                <div class="view-header"><h2>🧠 Autonomous Agents</h2><p>Real-time status of AI models.</p></div>
+                <div class="grid-cards">
+                    <div class="card"><h4><span class="status-dot"></span> Planner Agent</h4><p>Status: Active</p></div>
+                    <div class="card"><h4><span class="status-dot"></span> Builder Agent</h4><p>Model: DeepSeek Coder</p></div>
+                    <div class="card"><h4><span class="status-dot" style="background:var(--danger)"></span> Verifier</h4><p>Status: Offline</p></div>
                 </div>
             </div>
-        </div>
 
-        <div class="view-container" id="view-artifacts">
-            <div class="view-header"><h2>📦 Generated Artifacts</h2><p>Downloadable files and compiled code ready for deployment.</p></div>
-            <div class="table-responsive">
-                <table class="data-table">
-                    <tr><th>Artifact Name</th><th>Category</th><th>Size</th><th>Action</th></tr>
-                    <tr><td><strong>react_app_v1.zip</strong></td><td>Archive</td><td>4.2 MB</td><td><button class="attach-btn" style="color:var(--accent); border-color:var(--accent)">Download</button></td></tr>
-                    <tr><td><strong>market_report.pdf</strong></td><td>Document</td><td>1.1 MB</td><td><button class="attach-btn">View</button></td></tr>
-                    <tr><td><strong>automation.py</strong></td><td>Code</td><td>15 KB</td><td><button class="attach-btn" onclick="copyCode(this)">Copy</button></td></tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="view-container" id="view-providers">
-            <div class="view-header"><h2>🔑 API Providers & Models</h2><p>Manage endpoints for Cloud LLMs and Local hardware.</p></div>
-            <div class="table-responsive">
-                <table class="data-table">
-                    <tr><th>Provider</th><th>Status</th><th>Endpoint</th><th>Configuration</th></tr>
-                    <tr><td><strong>Ollama (Local)</strong></td><td><span style="color:var(--success)">● Online</span></td><td class="mono">localhost:11434</td><td><button class="attach-btn" onclick="openModal('Ollama Server')">Manage</button></td></tr>
-                    <tr><td><strong>OpenAI API</strong></td><td><span style="color:var(--success)">● Connected</span></td><td class="mono">api.openai.com</td><td><button class="attach-btn" onclick="openModal('OpenAI Key')">Update</button></td></tr>
-                    <tr><td><strong>Anthropic</strong></td><td><span style="color:var(--text-secondary)">○ Missing</span></td><td class="mono">api.anthropic.com</td><td><button class="attach-btn" onclick="openModal('Anthropic Key')" style="color:var(--accent); border-color:var(--accent)">+ Add Key</button></td></tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="view-container" id="view-audit">
-            <div class="view-header"><h2>📜 Security Audit Logs</h2><p>Immutable record of all AI actions and approvals.</p></div>
-            <div class="table-responsive">
-                <table class="data-table mono" style="font-size: 0.8rem;">
-                    <tr><th>Timestamp</th><th>Initiator</th><th>Event Detail</th><th>Status</th></tr>
-                    <tr><td>14:42:01</td><td>Builder Agent</td><td>Generated `server.js`</td><td><span style="color:var(--success)">Success</span></td></tr>
-                    <tr><td>10:15:30</td><td>Admin</td><td>Approved DB Migration</td><td><span style="color:var(--success)">Authorized</span></td></tr>
-                    <tr><td>09:30:11</td><td>System Guard</td><td>Blocked outbound port scan</td><td><span style="color:var(--danger)">Blocked</span></td></tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="view-container" id="view-settings">
-            <div class="view-header"><h2>⚙️ System Governance</h2><p>Configure SUMONIX AI behavior and strict policies.</p></div>
-            
-            <div class="settings-group">
-                <div class="setting-item">
-                    <div class="setting-info"><h4>Force Local Execution Mode</h4><p>Disables cloud APIs. Routes everything to local hardware models.</p></div>
-                    <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            <div class="view-container" id="view-tasks">
+                <div class="view-header"><h2>⚡ Active Tasks</h2><p>Agent workflow execution queue.</p></div>
+                <div class="kanban-board">
+                    <div class="kanban-col">
+                        <h3 style="color:var(--text-secondary); border-bottom:1px solid var(--border); padding-bottom:10px;">To Do</h3>
+                        <div class="kanban-task">Refactor login API<br><span style="color:var(--accent); font-size:0.75rem;">Builder</span></div>
+                    </div>
+                    <div class="kanban-col">
+                        <h3 style="color:var(--text-secondary); border-bottom:1px solid var(--border); padding-bottom:10px;">In Progress</h3>
+                        <div class="kanban-task" style="border-color:var(--accent);">Database Migration<br><span style="color:var(--danger); font-size:0.75rem;">System</span></div>
+                    </div>
                 </div>
-                <div class="setting-item">
-                    <div class="setting-info"><h4>Auto-Approve Low Risk Actions</h4><p>Allows AI to modify local files if security risk is 'LOW'.</p></div>
-                    <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-info"><h4>Persist Chat History</h4><p>Keep encrypted logs of all inputs in local database.</p></div>
-                    <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+
+            <div class="view-container" id="view-providers">
+                <div class="view-header"><h2>🔑 API Providers</h2><p>Manage model endpoints.</p></div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <tr><th>Provider</th><th>Status</th><th>Endpoint</th></tr>
+                        <tr><td>Ollama (Local)</td><td><span style="color:var(--success)">● Online</span></td><td>127.0.0.1:11434</td></tr>
+                        <tr><td>OpenAI</td><td><span style="color:var(--success)">● Connected</span></td><td>api.openai.com</td></tr>
+                    </table>
                 </div>
             </div>
             
-            <div class="settings-group">
-                <div class="setting-item">
-                    <div class="setting-info"><h4>Operating System Theme</h4></div>
-                    <select class="model-select" style="padding: 10px 15px;"><option>Dark Space</option><option>Light Corporate</option></select>
+            <div class="view-container" id="view-projects"><div class="view-header"><h2>📁 Projects</h2><p>Feature working in background.</p></div></div>
+            <div class="view-container" id="view-artifacts"><div class="view-header"><h2>📦 Artifacts</h2><p>Archive directory loaded.</p></div></div>
+            <div class="view-container" id="view-audit"><div class="view-header"><h2>📜 Audit Logs</h2><p>Syslogs attached.</p></div></div>
+
+        </main>
+
+        <aside class="right-sidebar" id="rightSidebar">
+            <div class="widget">
+                <h3>📊 Live Telemetry</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card"><div class="metric-value" id="cpu-metric">12%</div><div class="metric-label">CPU</div></div>
+                    <div class="metric-card"><div class="metric-value" id="ram-metric">4.2 GB</div><div class="metric-label">VRAM</div></div>
                 </div>
             </div>
-        </div>
 
-    </main>
-
-    <aside class="right-sidebar" id="rightSidebar">
-        <div class="widget">
-            <h3>📊 Live Telemetry</h3>
-            <div class="metrics-grid">
-                <div class="metric-card"><div class="metric-value" id="cpu-metric">12%</div><div class="metric-label">CPU Load</div></div>
-                <div class="metric-card"><div class="metric-value" id="ram-metric">4.2 GB</div><div class="metric-label">VRAM</div></div>
-                <div class="metric-card"><div class="metric-value" id="lat-metric" style="color:#8B949E;">14ms</div><div class="metric-label">Local Ping</div></div>
-                <div class="metric-card"><div class="metric-value">0.0%</div><div class="metric-label">Error Rate</div></div>
-            </div>
-        </div>
-
-        <div class="widget" style="background: rgba(210, 153, 34, 0.02);" id="approvalWidget">
-            <h3>🛡️ Zero-Trust Gate <span style="background:var(--warning); color:#000; padding:2px 6px; border-radius:10px; font-size:0.7rem; margin-left:auto;">1 Action</span></h3>
-            <div class="approval-card" id="approval1">
-                <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 5px;">Execute DB Migration</p>
-                <p class="mono" style="color: var(--warning); font-size: 0.75rem;">Target: `prod_db_v2`</p>
-                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 8px;">Agent requested SQL modify privileges.</p>
-                <div class="btn-group">
-                    <button class="btn-sm btn-reject" onclick="handleApproval('approval1', 'Rejected')">Deny</button>
-                    <button class="btn-sm btn-approve" onclick="handleApproval('approval1', 'Approved')">Authorize</button>
+            <div class="widget" style="flex-grow: 1; border-bottom: none; display: flex; flex-direction: column; overflow: hidden;">
+                <h3>🔴 Background Logs</h3>
+                <div class="terminal mono" id="terminalLogs">
+                    <div class="log-line"><span style="color:#8B949E">[Sys]</span> Boot sequence complete.</div>
                 </div>
             </div>
-        </div>
-
-        <div class="widget" style="flex-grow: 1; border-bottom: none; display: flex; flex-direction: column; padding-bottom: 20px;">
-            <h3>🔴 Background Kernel Logs</h3>
-            <div class="terminal mono" id="terminalLogs">
-                <div class="log-line"><span class="log-time">[Sys]</span> Boot sequence complete.</div>
-                <div class="log-line"><span class="log-time">[Ollama]</span> Daemon running on port 11434.</div>
-                <div class="log-line"><span class="log-time">[Network]</span> Webhook listener active.</div>
-            </div>
-        </div>
-    </aside>
-
-    <div class="modal-overlay" id="myModal">
-        <div class="modal-box">
-            <h3 id="modalTitle">Configuration</h3>
-            <p id="modalDesc" style="font-size:0.9rem; color:var(--text-secondary); line-height:1.5;">Enter secure API data.</p>
-            <input type="password" placeholder="sk-..." id="modalInput" autocomplete="off">
-            <div style="display: flex; gap: 12px; justify-content: flex-end;">
-                <button class="attach-btn" onclick="closeModal()" style="padding: 10px 20px;">Cancel</button>
-                <button class="execute-btn" onclick="saveModal()">Save Config</button>
-            </div>
-        </div>
+        </aside>
     </div>
 
     <script>
         let currentMode = 'Chat';
-        let fileCount = 1;
 
-        // Metric Simulation
         setInterval(() => {
             const cpu = Math.floor(Math.random() * 20) + 5; 
-            const ram = (Math.random() * 2.0 + 3.0).toFixed(1); 
-            const lat = Math.floor(Math.random() * 8) + 10; 
-            
             document.getElementById('cpu-metric').innerText = cpu + '%';
-            document.getElementById('ram-metric').innerText = ram + ' GB';
-            document.getElementById('lat-metric').innerText = lat + 'ms';
-            
-            if(cpu > 20) document.getElementById('cpu-metric').style.color = 'var(--warning)';
-            else if(cpu > 23) document.getElementById('cpu-metric').style.color = 'var(--danger)';
-            else document.getElementById('cpu-metric').style.color = 'var(--accent)';
+            document.getElementById('cpu-metric').style.color = cpu > 20 ? 'var(--warning)' : 'var(--accent)';
         }, 1500);
 
-        // Terminal Log Function
-        function addLog(message) {
-            const terminal = document.getElementById('terminalLogs');
-            const now = new Date();
-            const timeStr = `[${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}]`;
-            const logLine = document.createElement('div');
-            logLine.className = 'log-line';
-            logLine.innerHTML = `<span class="log-time">${timeStr}</span> ${message}`;
-            terminal.appendChild(logLine);
-            terminal.scrollTop = terminal.scrollHeight;
-        }
-
-        // Sidebar Toggle for Mobile/Tablet
         function toggleSidebar(side) {
             const sidebar = side === 'left' ? document.getElementById('leftSidebar') : document.getElementById('rightSidebar');
             const overlay = document.getElementById('sidebarOverlay');
+            
             sidebar.classList.toggle('active');
             
-            if (document.getElementById('leftSidebar').classList.contains('active') || document.getElementById('rightSidebar').classList.contains('active')) {
+            if (document.getElementById('leftSidebar').classList.contains('active') || 
+                document.getElementById('rightSidebar').classList.contains('active')) {
                 overlay.classList.add('active');
-            } else {
-                overlay.classList.remove('active');
-            }
+            } else { overlay.classList.remove('active'); }
         }
 
         function closeAllSidebars() {
@@ -531,217 +315,98 @@
             document.getElementById('sidebarOverlay').classList.remove('active');
         }
 
-        // Sidebar Navigation
         function switchSidebar(viewId, element) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
 
             document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+            const targetView = document.getElementById(viewId);
+            if(targetView) { targetView.classList.add('active'); } 
+            else { document.getElementById('view-agents').classList.add('active'); }
 
             document.getElementById('topNav').style.display = (viewId === 'view-command') ? 'flex' : 'none';
-            document.getElementById('omniboxWrapper').style.display = (viewId === 'view-command') ? 'flex' : 'none';
-            
-            addLog(`UI Route -> Opened ${element.innerText.replace(/[^\w\s]/gi, '').trim()}`);
-            
-            if (window.innerWidth <= 1100) closeAllSidebars(); // Auto close on smaller screens
+            if (window.innerWidth <= 768) closeAllSidebars();
         }
 
-        // Top Navigation (Context Switching)
         function switchTopTab(element, mode) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             element.classList.add('active');
             currentMode = mode;
-            
-            const chatArea = document.getElementById('chatOutput');
-            const filesArea = document.getElementById('filesOutput');
-            const omniInput = document.getElementById('promptInput');
-
-            if (mode === 'Files') {
-                chatArea.style.display = 'none';
-                filesArea.style.display = 'flex';
-                omniInput.placeholder = "[File Explorer Mode] Search for files...";
-                addLog(`Switched context to File Manager.`);
-            } else {
-                filesArea.style.display = 'none';
-                chatArea.style.display = 'flex';
-                let actionVerb = mode === 'Build' ? 'describe app to build' : mode === 'Automate' ? 'describe workflow' : mode === 'Research' ? 'enter search query' : 'enter command';
-                omniInput.placeholder = `[${mode} Mode] Please ${actionVerb}...`;
-                addLog(`Switched to ${mode} mode.`);
-                chatArea.scrollTop = chatArea.scrollHeight;
-            }
+            document.getElementById('promptInput').placeholder = `[${mode} Mode] Enter command...`;
         }
 
-        // Attachments Logic
-        function attachFile(type, icon) {
-            const container = document.getElementById('attached-files');
-            const badge = document.createElement('div');
-            badge.className = 'file-badge';
-            const fileName = `data_${fileCount++}.${type === 'Image' ? 'png' : type === 'Code' ? 'py' : 'pdf'}`;
-            badge.innerHTML = `${icon} ${fileName} <span onclick="this.parentElement.remove()" title="Remove">✕</span>`;
-            container.appendChild(badge);
-            addLog(`VFS -> Mounted file ${fileName}`);
-        }
-
-        // Copy Code Function
-        function copyCode(btn) {
-            const originalText = btn.innerText;
-            btn.innerText = 'Copied!';
-            btn.style.color = 'var(--success)';
-            btn.style.borderColor = 'var(--success)';
-            addLog(`Clipboard -> Copied to clipboard.`);
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.color = '';
-                btn.style.borderColor = '';
-            }, 2000);
-        }
-
-        // Master Execution Engine
         function executeTask() {
-            if(currentMode === 'Files') { addLog("Search index query initiated..."); return; }
-
             const inputEl = document.getElementById('promptInput');
             const userText = inputEl.value.trim();
+            if(!userText) return;
+
             const outputArea = document.getElementById('chatOutput');
             const pipeline = document.getElementById('pipelineBox');
-            const attachedFiles = document.getElementById('attached-files');
 
-            if(!userText && attachedFiles.children.length === 0) return;
-
-            // Generate User Message
             const userMsg = document.createElement('div');
             userMsg.className = 'msg user';
-            let attachText = attachedFiles.children.length > 0 ? `<br><span style="font-size:0.75rem; color:var(--accent); margin-top:5px; display:inline-block;">[Attached ${attachedFiles.children.length} file(s)]</span>` : "";
-            userMsg.innerHTML = (userText || "Please analyze attached files.") + attachText;
+            userMsg.innerText = userText;
             outputArea.insertBefore(userMsg, pipeline);
-            
-            // Clean up
             inputEl.value = '';
-            inputEl.style.height = 'auto'; // reset height
-            attachedFiles.innerHTML = ''; 
             
             pipeline.style.display = 'block';
             outputArea.scrollTop = outputArea.scrollHeight;
-            
-            const modelName = document.getElementById('modelSelector').options[document.getElementById('modelSelector').selectedIndex].text;
-            addLog(`Executing payload via ${modelName}...`);
 
-            // Reset Pipeline Visuals
             const steps = ['planner', 'researcher', 'builder', 'verifier'];
             steps.forEach(s => {
                 document.getElementById('step-' + s).className = 'step';
                 document.getElementById('step-' + s).querySelector('.step-icon').innerHTML = '';
             });
 
-            // Processing Timeline
             let currentStep = 0;
             function processStep() {
                 if(currentStep > 0) {
                     const prev = document.getElementById('step-' + steps[currentStep-1]);
-                    prev.classList.remove('active');
-                    prev.classList.add('done');
+                    prev.classList.remove('active'); prev.classList.add('done');
                     prev.querySelector('.step-icon').innerHTML = '✓';
                 }
                 
                 if(currentStep < steps.length) {
                     if(currentMode === 'Chat' && currentStep > 0) currentStep = steps.length;
-                    else if(currentMode === 'Research' && currentStep > 1) currentStep = steps.length; 
-
+                    
                     if(currentStep < steps.length) {
                         const current = document.getElementById('step-' + steps[currentStep]);
                         current.classList.add('active');
                         current.querySelector('.step-icon').innerHTML = '⚙';
-                        addLog(`OS -> [${steps[currentStep].toUpperCase()}] module is processing...`);
                         currentStep++;
-                        setTimeout(processStep, 800); 
+                        setTimeout(processStep, 600); 
                     } else finishExecution();
                 } else finishExecution();
             }
 
-            // AI Response Builder
             function finishExecution() {
                 pipeline.style.display = 'none';
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'msg ai';
                 
-                let responseHTML = `<strong>SUMONIX AI</strong> <span style="font-size:0.65rem; color:var(--text-secondary); margin-left:10px;">via ${modelName}</span><br><br>`;
-
-                if(currentMode === 'Chat') {
-                    responseHTML += `Parameters received and stored in context. Ready to proceed with system modifications or further analysis.`;
-                } 
-                else if(currentMode === 'Research') {
-                    responseHTML += `Based on Perplexity search integration:<br><br>
-                    Running offline LLMs requires strict hardware orchestration <span class="citation" title="HuggingFace Docs">[1]</span>. By utilizing quantized models via Ollama, environments maintain Zero-Trust security protocols <span class="citation" title="ArXiv: Security">[2]</span>.`;
-                }
-                else if(currentMode === 'Build') {
-                    responseHTML += `Project structure generated successfully.<br>
-                    <div class="code-block">
-                        <div class="code-header"><span>/workspace/deploy.py</span><button class="copy-btn" onclick="copyCode(this)">Copy Code</button></div>
-                        <pre>import sumonix_core\n\ndef run_deployment():\n    agent = sumonix_core.BuilderAgent()\n    agent.deploy_to_server(target="production")\n\nif __name__ == "__main__":\n    run_deployment()</pre>
-                    </div>`;
-                }
-                else if(currentMode === 'Automate') {
-                    responseHTML += `Automation workflow configured successfully:<br>
-                    <div class="workflow-diagram">
-                        <div class="wf-node">🌐 GitHub Webhook</div> ➔ 
-                        <div class="wf-node">🧠 DeepSeek LLM</div> ➔ 
-                        <div class="wf-node" style="border-color:var(--success);">💾 PostgreSQL Log</div>
-                    </div>`;
+                if(currentMode === 'Build') {
+                    aiMsg.innerHTML = `<strong>SUMONIX AI</strong><br><br>Code generated:<br>
+                    <div class="code-block"><div class="code-header">script.py</div><pre>print("Task Complete")</pre></div>`;
+                } else if(currentMode === 'Automate') {
+                    aiMsg.innerHTML = `<strong>SUMONIX AI</strong><br>Workflow created:<br>
+                    <div class="workflow-diagram"><div class="wf-node">Webhook</div> ➔ <div class="wf-node">LLM</div></div>`;
+                } else {
+                    aiMsg.innerHTML = `<strong>SUMONIX AI</strong><br><br>Task processed successfully.`;
                 }
 
-                aiMsg.innerHTML = responseHTML;
                 outputArea.appendChild(aiMsg);
                 outputArea.appendChild(pipeline); 
-                setTimeout(() => { outputArea.scrollTop = outputArea.scrollHeight; }, 50);
-                addLog(`<span style="color:var(--success)">✓ Task completed. Output rendered.</span>`);
+                outputArea.scrollTop = outputArea.scrollHeight;
             }
-
-            setTimeout(processStep, 400); 
+            setTimeout(processStep, 300); 
         }
 
-        // Auto Resize Textarea & Enter key trigger
         const tx = document.getElementById("promptInput");
         tx.setAttribute("style", "height:" + (tx.scrollHeight) + "px;overflow-y:hidden;");
         tx.addEventListener("input", function() {
             this.style.height = "auto";
             this.style.height = (this.scrollHeight) + "px";
         }, false);
-
-        tx.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                executeTask();
-            }
-        });
-
-        // Modals Configuration
-        function openModal(title) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalInput').value = '';
-            document.getElementById('modalInput').type = title.includes('Ollama') ? 'text' : 'password';
-            document.getElementById('modalInput').placeholder = title.includes('Ollama') ? 'http://127.0.0.1:11434' : 'sk-...';
-            
-            document.getElementById('myModal').classList.add('active');
-            setTimeout(() => document.getElementById('modalInput').focus(), 100);
-        }
-
-        function closeModal() { document.getElementById('myModal').classList.remove('active'); }
-        function saveModal() {
-            closeModal();
-            addLog(`<span style="color:var(--success)">✓ Configuration saved for ${document.getElementById('modalTitle').innerText}.</span>`);
-        }
-
-        // Zero-Trust Gateway
-        function handleApproval(id, status) {
-            const el = document.getElementById(id);
-            el.style.transform = 'scale(0.95)';
-            el.style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('approvalWidget').style.display = 'none'; 
-                addLog(`Zero-Trust Gateway -> Admin marked task as <strong style="color:${status === 'Approved' ? 'var(--success)' : 'var(--danger)'}">${status}</strong>.`);
-            }, 300);
-        }
     </script>
 </body>
 </html>
