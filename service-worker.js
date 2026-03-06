@@ -1,4 +1,4 @@
-const CACHE_NAME = "sumonix-os-v1";
+const CACHE_NAME = "sumonix-os-v2";
 const assetsToCache = [
   "/",
   "/index.html",
