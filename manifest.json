@@ -1,11 +1,11 @@
 {
-  "name": "SUMONIX AI OS",
-  "short_name": "SUMONIX AI",
+  "name": "SUMONIX AI",
+  "short_name": "SUMONIX",
   "description": "Advanced Intelligent Systems Enterprise OS",
   "start_url": "/dashboard.html",
   "display": "standalone",
   "background_color": "#0E1117",
-  "theme_color": "#00ffff",
+  "theme_color": "#00E5FF",
   "orientation": "portrait-primary",
   "icons": [
     {
