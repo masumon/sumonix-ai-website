@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SUMONIX AI - OS Workspace</title>
-    
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0E1117">
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,11 +17,10 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* PERFECT FIT TO SCREEN LOGIC */
+        /* PERFECT APK FIT TO SCREEN LOGIC */
         body {
             font-family: 'Inter', sans-serif; background-color: var(--bg-app);
-            color: var(--text-primary); 
-            width: 100vw; height: 100vh; height: 100dvh; 
+            color: var(--text-primary); width: 100vw; height: 100vh; height: 100dvh; 
             overflow: hidden; display: flex; flex-direction: column;
         }
 
@@ -41,7 +38,7 @@
         .main-wrapper { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; height: 100%; position: relative; background: var(--bg-app); }
         .right-sidebar { width: 320px; flex-shrink: 0; background: var(--bg-surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; z-index: 100; transition: 0.3s; }
 
-        .mobile-header { display: none; justify-content: space-between; align-items: center; padding: 0 15px; height: 60px; background: var(--glass-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 50; }
+        .mobile-header { display: none; justify-content: space-between; align-items: center; padding: 0 15px; height: 60px; background: var(--glass-bg); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 50; }
         .app-title { font-weight: 600; color: var(--accent); font-size: 1.1rem; letter-spacing: 1px; }
         .icon-btn { background: transparent; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 8px; transition: 0.2s; }
         .icon-btn:hover { color: var(--accent); }
@@ -56,7 +53,7 @@
         .nav-item:hover { background-color: var(--bg-hover); color: var(--text-primary); }
         .nav-item.active { background-color: rgba(0, 229, 255, 0.1); color: var(--accent); border-left: 3px solid var(--accent); font-weight: 500; }
 
-        .top-nav { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 10px; background: var(--glass-bg); backdrop-filter: blur(12px); flex-shrink: 0; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .top-nav { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 10px; background: var(--glass-bg); flex-shrink: 0; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
         .top-nav::-webkit-scrollbar { display: none; }
         .tab { color: var(--text-secondary); cursor: pointer; padding: 8px 14px; border-radius: 6px; transition: 0.2s; font-size: 0.9rem; font-weight: 500; user-select: none; }
         .tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
@@ -73,7 +70,7 @@
         #view-command { padding: 0; height: 100%; display: none; flex-direction: column; justify-content: space-between; align-items: center; }
         #view-command.active { display: flex; }
         
-        .output-area { width: 100%; max-width: 950px; flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
+        .output-area { width: 100%; max-width: 950px; flex-grow: 1; overflow-y: auto; padding: 25px 20px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
         .input-area-wrapper { width: 100%; padding: 15px 20px; background: linear-gradient(to top, var(--bg-app) 80%, transparent); display: flex; justify-content: center; flex-shrink: 0; }
 
         .msg { max-width: 90%; padding: 15px 20px; border-radius: 12px; font-size: 0.95rem; line-height: 1.5; animation: fadeIn 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1); word-wrap: break-word; }
@@ -94,12 +91,9 @@
         .omnibox-footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.2); border-radius: 0 0 12px 12px; flex-wrap: wrap; gap: 10px; }
         .attachments { display: flex; gap: 8px; flex-wrap: nowrap; overflow-x: auto; align-items: center; flex-grow: 1; padding-bottom: 2px; }
         .attachments::-webkit-scrollbar { display: none; }
-        
         .attach-btn { background: var(--bg-app); border: 1px solid var(--border); color: var(--text-secondary); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 500; transition: 0.2s; white-space: nowrap; display: flex; align-items:center; gap:5px;}
         .attach-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
-        
         .execute-btn { background-color: var(--accent); color: #000; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; white-space: nowrap; box-shadow: 0 4px 10px rgba(0, 229, 255, 0.2);}
-        .execute-btn:hover { box-shadow: 0 6px 20px rgba(0, 229, 255, 0.4); transform: translateY(-2px); background-color: #33eaff; }
         select.model-select { background: var(--bg-app); color: var(--text-primary); border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; font-size: 0.85rem; outline: none; }
 
         .pipeline { width: 100%; background: var(--bg-surface); border: 1px solid var(--accent); border-radius: 12px; padding: 20px; display: none; margin-bottom: 20px; }
@@ -132,7 +126,8 @@
         
         .terminal { background: #050505; padding: 15px; border-radius: 8px; border: 1px solid #30363d; flex-grow: 1; min-height: 150px; overflow-y: auto; color: #a5d6ff; font-size: 0.8rem; }
         .log-line { margin-bottom: 5px; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
-        
+
+        /* ======== MOBILE RESPONSIVE FIX ======== */
         @media (max-width: 1100px) {
             .right-sidebar { position: fixed; right: 0; transform: translateX(100%); height: 100%; }
             .right-sidebar.active { transform: translateX(0); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
@@ -143,16 +138,10 @@
         @media (max-width: 768px) {
             .left-sidebar { position: fixed; left: 0; transform: translateX(-100%); height: 100%; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
             .left-sidebar.active { transform: translateX(0); }
-            
             .mobile-header .left-menu-btn { display: flex; } 
             .view-container { padding: 15px; }
-            
             .omnibox-footer { flex-direction: column; align-items: stretch; }
-            .attachments { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 5px; }
             .execute-btn { width: 100%; padding: 12px; margin-top: 10px;}
-            
-            .msg { max-width: 95%; padding: 12px 15px; font-size: 0.9rem; }
-            .pipeline-steps::before { display: none; }
         }
     </style>
 </head>
@@ -169,7 +158,6 @@
     <div class="os-core-wrapper">
         <aside class="left-sidebar" id="leftSidebar">
             <div class="logo">◉ SUMONIX AI</div>
-            
             <div class="section-title">Workspace</div>
             <ul class="nav-menu">
                 <li class="nav-item active" onclick="switchSidebar('view-command', this)">⌘ Command Center</li>
@@ -178,7 +166,6 @@
                 <li class="nav-item" onclick="switchSidebar('view-tasks', this)">⚡ Active Tasks</li>
                 <li class="nav-item" onclick="switchSidebar('view-artifacts', this)">📦 Artifacts</li>
             </ul>
-
             <div class="section-title">Administration</div>
             <ul class="nav-menu">
                 <li class="nav-item" onclick="switchSidebar('view-providers', this)">🔑 API Providers</li>
@@ -196,11 +183,7 @@
 
             <div class="view-container active" id="view-command">
                 <div class="output-area" id="chatOutput">
-                    <div class="msg ai">
-                        <strong>SUMONIX AI</strong><br><br>
-                        Secure OS initialized. Ready for your enterprise workflow.
-                    </div>
-                    
+                    <div class="msg ai"><strong>SUMONIX AI</strong><br><br>Secure OS initialized. Ready for your enterprise workflow.</div>
                     <div class="pipeline" id="pipelineBox">
                         <h3 style="color:var(--accent); font-size:0.9rem; margin-bottom:15px;">◉ Processing Request...</h3>
                         <div class="pipeline-steps">
@@ -267,7 +250,6 @@
             <div class="view-container" id="view-projects"><div class="view-header"><h2>📁 Projects</h2><p>Feature working in background.</p></div></div>
             <div class="view-container" id="view-artifacts"><div class="view-header"><h2>📦 Artifacts</h2><p>Archive directory loaded.</p></div></div>
             <div class="view-container" id="view-audit"><div class="view-header"><h2>📜 Audit Logs</h2><p>Syslogs attached.</p></div></div>
-
         </main>
 
         <aside class="right-sidebar" id="rightSidebar">
@@ -278,7 +260,6 @@
                     <div class="metric-card"><div class="metric-value" id="ram-metric">4.2 GB</div><div class="metric-label">VRAM</div></div>
                 </div>
             </div>
-
             <div class="widget" style="flex-grow: 1; border-bottom: none; display: flex; flex-direction: column; overflow: hidden;">
                 <h3>🔴 Background Logs</h3>
                 <div class="terminal mono" id="terminalLogs">
@@ -300,11 +281,8 @@
         function toggleSidebar(side) {
             const sidebar = side === 'left' ? document.getElementById('leftSidebar') : document.getElementById('rightSidebar');
             const overlay = document.getElementById('sidebarOverlay');
-            
             sidebar.classList.toggle('active');
-            
-            if (document.getElementById('leftSidebar').classList.contains('active') || 
-                document.getElementById('rightSidebar').classList.contains('active')) {
+            if (document.getElementById('leftSidebar').classList.contains('active') || document.getElementById('rightSidebar').classList.contains('active')) {
                 overlay.classList.add('active');
             } else { overlay.classList.remove('active'); }
         }
@@ -318,7 +296,6 @@
         function switchSidebar(viewId, element) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
-
             document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
             const targetView = document.getElementById(viewId);
             if(targetView) { targetView.classList.add('active'); } 
@@ -365,10 +342,8 @@
                     prev.classList.remove('active'); prev.classList.add('done');
                     prev.querySelector('.step-icon').innerHTML = '✓';
                 }
-                
                 if(currentStep < steps.length) {
                     if(currentMode === 'Chat' && currentStep > 0) currentStep = steps.length;
-                    
                     if(currentStep < steps.length) {
                         const current = document.getElementById('step-' + steps[currentStep]);
                         current.classList.add('active');
@@ -383,17 +358,13 @@
                 pipeline.style.display = 'none';
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'msg ai';
-                
                 if(currentMode === 'Build') {
-                    aiMsg.innerHTML = `<strong>SUMONIX AI</strong><br><br>Code generated:<br>
-                    <div class="code-block"><div class="code-header">script.py</div><pre>print("Task Complete")</pre></div>`;
+                    aiMsg.innerHTML = `<strong>SUMONIX AI</strong><br><br>Code generated:<br><div class="code-block"><div class="code-header">script.py</div><pre>print("Task Complete")</pre></div>`;
                 } else if(currentMode === 'Automate') {
-                    aiMsg.innerHTML = `<strong>SUMONIX AI</strong><br>Workflow created:<br>
-                    <div class="workflow-diagram"><div class="wf-node">Webhook</div> ➔ <div class="wf-node">LLM</div></div>`;
+                    aiMsg.innerHTML = `<strong>SUMONIX AI</strong><br>Workflow created:<br><div class="workflow-diagram"><div class="wf-node">Webhook</div> ➔ <div class="wf-node">LLM</div></div>`;
                 } else {
                     aiMsg.innerHTML = `<strong>SUMONIX AI</strong><br><br>Task processed successfully.`;
                 }
-
                 outputArea.appendChild(aiMsg);
                 outputArea.appendChild(pipeline); 
                 outputArea.scrollTop = outputArea.scrollHeight;
