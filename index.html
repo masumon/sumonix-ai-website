@@ -7,33 +7,25 @@
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00ffff">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230E1117'/%3E%3Ccircle cx='50' cy='50' r='46' stroke='%2300ffff' stroke-width='3' fill='none' /%3E%3Cpath d='M 25 75 L 50 20 L 75 75' stroke='%232979ff' stroke-width='12' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='50' cy='52' r='8' fill='%2300ffff' /%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23050b14'/%3E%3Ccircle cx='50' cy='50' r='46' stroke='%2300ffff' stroke-width='3' fill='none' /%3E%3Cpath d='M 25 75 L 50 20 L 75 75' stroke='%232979ff' stroke-width='12' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='50' cy='52' r='8' fill='%2300ffff' /%3E%3C/svg%3E">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
-        /* ================= THEME VARIABLES ================= */
+        /* ================= THEME VARIABLES (ORIGINAL) ================= */
         :root {
             --primary: #00ffff; --secondary: #3b82f6; --accent: #10b981; 
             --bg-dark: #050b14; --card-dark: #0f172a; --text-light: #f8fafc; 
             --text-muted: #94a3b8; --glass: rgba(255, 255, 255, 0.05); 
             --border: rgba(255, 255, 255, 0.1); --bg-overlay: rgba(5, 11, 20, 0.85);
-
             --bg: var(--bg-dark); --card: var(--card-dark); --text: var(--text-light); --border-color: var(--border);
         }
 
-        /* FIXED: LIGHT MODE ADJUSTMENTS FOR READABILITY */
         [data-theme="light"] {
-            --primary: #008b8b; 
-            --secondary: #2563eb; 
-            --bg: #f8fafc; 
-            --card: #ffffff; 
-            --text: #0f172a; 
-            --text-muted: #475569; 
-            --glass: rgba(0, 0, 0, 0.03); 
-            --border-color: rgba(0, 0, 0, 0.15); 
-            --bg-overlay: rgba(248, 250, 252, 0.92); 
+            --primary: #008b8b; --secondary: #2563eb; --bg: #f8fafc; --card: #ffffff; 
+            --text: #0f172a; --text-muted: #475569; --glass: rgba(0, 0, 0, 0.03); 
+            --border-color: rgba(0, 0, 0, 0.15); --bg-overlay: rgba(248, 250, 252, 0.92); 
         }
 
         [data-theme="light"] .chat-body { background: #f8fafc; }
@@ -46,7 +38,6 @@
         [data-theme="light"] .modal input { color: #0f172a; background: #ffffff; }
         [data-theme="light"] .modal input::placeholder { color: #64748b; }
 
-        /* ================= GLOBAL RESET & PARALLAX BACKGROUND ================= */
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
         
         body { 
@@ -61,7 +52,6 @@
         h1, h2, h3, .orbitron { font-family: 'Orbitron', sans-serif; }
         .highlight { background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* ================= NAVIGATION ================= */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 3%; background: rgba(5, 11, 20, 0.85); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); backdrop-filter: blur(15px); }
         [data-theme="light"] nav { background: rgba(248, 250, 252, 0.95); }
         
@@ -78,7 +68,6 @@
         .btn-icon { background: var(--glass); border: 1px solid var(--border-color); color: var(--text); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .btn-icon:hover { border-color: var(--primary); color: var(--primary); }
 
-        /* ================= MOBILE SIDE MENU ================= */
         .side-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: var(--card); z-index: 2001; transition: 0.4s; overflow-y: auto; border-right: 1px solid var(--border-color); box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
         .side-menu.active { left: 0; }
         .side-menu-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border-color); }
@@ -90,24 +79,17 @@
         .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; display: none; backdrop-filter: blur(3px); }
         .menu-overlay.active { display: block; }
 
-        /* ================= BUTTONS ================= */
         .btn { padding: 12px 25px; border-radius: 50px; font-weight: 600; text-decoration: none; transition: 0.3s; cursor: pointer; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-gradient { background: linear-gradient(45deg, var(--primary), var(--secondary)); color: #000; font-weight: bold; box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2); }
         .btn-gradient:hover { box-shadow: 0 8px 25px rgba(0, 255, 255, 0.4); transform: translateY(-2px); }
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text); }
         .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
-        .sumonix-btn {
-            display: inline-flex; align-items: center; justify-content: center; padding: 12px 28px;
-            background-color: #00E5FF; color: #000000; text-decoration: none; font-family: 'Inter', sans-serif;
-            font-weight: 600; font-size: 16px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
-            transition: all 0.3s ease; border: 2px solid #00E5FF;
-        }
+        .sumonix-btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 28px; background-color: #00E5FF; color: #000000; text-decoration: none; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 16px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3); transition: all 0.3s ease; border: 2px solid #00E5FF; }
         .sumonix-btn:hover { background-color: transparent; color: #00E5FF; box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5); transform: translateY(-2px); }
 
-        /* ================= AUTH MODAL ================= */
         .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); }
-        .modal-content { background: var(--card); width: 90%; max-width: 400px; margin: 10% auto; padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border-color); position: relative; }
+        .modal-content { background: var(--card); width: 90%; max-width: 400px; margin: 10vh auto; padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border-color); position: relative; max-height: 80vh; overflow-y: auto;}
         .close-btn { position: absolute; right: 20px; top: 15px; cursor: pointer; font-size: 1.5rem; color: var(--text-muted); }
         .modal input { width: 100%; padding: 12px; margin-bottom: 15px; background: var(--glass); border: 1px solid var(--border-color); border-radius: 8px; outline: none; }
         .modal input:focus { border-color: var(--primary); }
@@ -116,28 +98,25 @@
         .divider::before, .divider::after { content: ""; position: absolute; top: 50%; width: 40%; height: 1px; background: var(--border-color); }
         .divider::before { left: 0; } .divider::after { right: 0; }
 
-        /* ================= SECTIONS & CARDS ================= */
         section { padding: 100px 5% 60px; border-bottom: 1px solid var(--border-color); }
         .section-header { text-align: center; margin-bottom: 3rem; }
-        .section-header h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .section-header h2 { font-size: clamp(2rem, 4vw, 2.5rem); margin-bottom: 10px; }
         .section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto; }
 
-        .grid { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
         .card { background: var(--card); padding: 2rem; border-radius: 20px; border: 1px solid var(--border-color); transition: 0.4s; position: relative; overflow: hidden; }
         .card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 255, 255, 0.05); }
         .card-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 1.5rem; filter: brightness(0.85); transition: 0.4s; }
         .card:hover .card-img { filter: brightness(1); }
 
-        /* ================= HERO SECTION ================= */
-        #home { min-height: 100vh; display: flex; align-items: center; justify-content: space-between; padding: 100px 8% 0; background: transparent; }
-        .hero-text { flex: 1; text-align: left; }
-        .hero-image { flex: 1; text-align: right; display: flex; justify-content: flex-end;}
-        .hero-image img { max-width: 90%; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,255,255,0.2); animation: float 6s ease-in-out infinite; }
+        #home { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: space-between; padding: 120px 8% 60px; background: transparent; flex-wrap: wrap;}
+        .hero-text { flex: 1; min-width: 300px; text-align: left; }
+        .hero-image { flex: 1; min-width: 300px; text-align: right; display: flex; justify-content: flex-end;}
+        .hero-image img { max-width: 100%; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,255,255,0.2); animation: float 6s ease-in-out infinite; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
-        .hero-title { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 1rem; line-height: 1.2; }
+        .hero-title { font-size: clamp(2.5rem, 6vw, 4.5rem); margin-bottom: 1rem; line-height: 1.2; }
         .hero-desc { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin-bottom: 2.5rem; }
 
-        /* ================= FLOATING BUTTONS & CHATBOT ================= */
         .fab-container { position: fixed; bottom: 25px; z-index: 999; display: flex; flex-direction: column; gap: 15px; }
         .fab-left { left: 25px; } .fab-right { right: 25px; }
         .wa-btn { background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-decoration: none; transition: 0.3s;}
@@ -145,23 +124,25 @@
         .chat-toggle { background: var(--secondary); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 25px; cursor: pointer; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: 0.3s;}
         .chat-toggle:hover { transform: scale(1.1); }
         
-        #chatWindow { display: none; position: fixed; bottom: 100px; right: 25px; width: 320px; height: 450px; background: var(--card); border: 1px solid var(--primary); border-radius: 15px; flex-direction: column; z-index: 2001; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        #chatWindow { display: none; position: fixed; bottom: 100px; right: 25px; width: 320px; height: 450px; max-height: 70vh; background: var(--card); border: 1px solid var(--primary); border-radius: 15px; flex-direction: column; z-index: 2001; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
         .chat-header { background: var(--secondary); padding: 15px; color: white; font-weight: bold; display: flex; justify-content: space-between; font-family: 'Orbitron';}
         .chat-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; }
         .chat-input { padding: 10px; display: flex; border-top: 1px solid var(--border-color); }
-        .chat-input input { flex: 1; border: none; outline: none; padding: 5px; background: transparent; }
+        .chat-input input { flex: 1; border: none; outline: none; padding: 5px; background: transparent; color: var(--text); }
         .msg { padding: 10px 15px; border-radius: 10px; max-width: 85%; word-wrap: break-word;}
         .bot { align-self: flex-start; border: 1px solid var(--primary); }
         .user { background: var(--secondary); align-self: flex-end; color: white;}
 
-        /* ================= SCOPED OS DASHBOARD CSS ================= */
+        /* ================= EMBEDDED DASHBOARD CSS (FOR INDEX.HTML DEMO) ================= */
         .os-wrapper {
             --os-bg: #0E1117; --os-surface: #161B22; --os-hover: rgba(255, 255, 255, 0.05);
             --os-accent: #00E5FF; --os-text: #E6EDF3; --os-text-sec: #8B949E;
             --os-border: rgba(230, 237, 243, 0.15); --os-danger: #da3633;
             --os-success: #3fb950; --os-warning: #d29922;
             
-            display: flex; height: 800px; width: 100%; max-width: 1400px; margin: 0 auto;
+            display: flex; 
+            height: 80vh; min-height: 600px; max-height: 850px; /* FIT TO SCREEN INSIDE DEMO SECTION */
+            width: 100%; max-width: 1400px; margin: 0 auto;
             background: var(--os-bg); color: var(--os-text); font-family: 'Inter', sans-serif;
             border-radius: 16px; overflow: hidden; border: 1px solid var(--os-border);
             box-shadow: 0 25px 50px rgba(0,0,0,0.5); text-align: left; position: relative;
@@ -176,7 +157,7 @@
         .os-mid { flex-grow: 1; display: flex; flex-direction: column; min-width: 0; background: var(--os-bg); position: relative; }
         .os-right { width: 300px; background: var(--os-surface); border-left: 1px solid var(--os-border); display: flex; flex-direction: column; flex-shrink: 0; transition: 0.3s; }
         
-        .os-mobile-head { display: none; height: 50px; background: var(--os-surface); border-bottom: 1px solid var(--os-border); align-items: center; justify-content: space-between; padding: 0 15px; }
+        .os-mobile-head { display: none; height: 50px; background: var(--os-surface); border-bottom: 1px solid var(--os-border); align-items: center; justify-content: space-between; padding: 0 15px; flex-shrink:0;}
         .os-icon-btn { background: transparent; border: none; color: var(--os-text); font-size: 1.2rem; cursor: pointer; }
         
         .os-logo { padding: 20px; font-size: 1.1rem; font-weight: 600; color: var(--os-accent); border-bottom: 1px solid var(--os-border); }
@@ -211,7 +192,7 @@
         
         .os-code { background: #0d1117; border: 1px solid var(--os-border); border-radius: 8px; margin-top: 10px; overflow: hidden; width: 100%; }
         .os-code-head { background: #161B22; font-size: 0.75rem; color: var(--os-text-sec); padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--os-border); }
-        .os-code pre { padding: 15px; overflow-x: auto; color: #e6edf3; font-size: 0.8rem; line-height: 1.5; font-family: 'JetBrains Mono', monospace;}
+        .os-code pre { padding: 15px; overflow-x: auto; color: #e6edf3; font-size: 0.8rem; line-height: 1.5; font-family: 'JetBrains Mono', monospace; margin:0;}
         
         .os-wf { display: flex; align-items: center; gap: 10px; margin-top: 15px; padding: 15px; background: var(--os-surface); border-radius: 8px; border: 1px dashed rgba(0, 229, 255, 0.3); overflow-x: auto; }
         .os-node { background: var(--os-bg); border: 1px solid var(--os-accent); padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
@@ -261,37 +242,35 @@
         
         .os-term { background: #050505; padding: 15px; border-radius: 8px; border: 1px solid #30363d; height: 220px; overflow-y: auto; color: #a5d6ff; font-size: 0.75rem; font-family: 'JetBrains Mono', monospace;}
         .os-log { margin-bottom: 6px; line-height: 1.4; word-break: break-all; }
-        
+
+        /* OS Dashboard Responsive */
         @media(max-width: 950px) {
             .os-right { position: absolute; right: 0; height: 100%; transform: translateX(100%); z-index: 20; }
             .os-right.active { transform: translateX(0); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
             .os-mobile-head { display: flex; }
         }
         @media(max-width: 768px) {
-            .os-wrapper { height: 750px; }
+            .os-wrapper { height: 70vh; min-height: 500px; }
             .os-left { position: absolute; left: 0; height: 100%; transform: translateX(-100%); }
             .os-left.active { transform: translateX(0); box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
             .os-box-foot { flex-direction: column; align-items: stretch; }
-            .os-exec-btn { justify-content: center; margin-top: 10px; }
+            .os-btn-run { justify-content: center; margin-top: 10px; }
         }
 
-        /* ================= OTHERS ================= */
+        /* Platform Icons Original CSS */
         .platform-icons { display: flex; justify-content: center; gap: 25px; font-size: 2.5rem; color: var(--text-muted); margin-bottom: 20px; }
         .pay-icons { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
         .pay-item { background: var(--card); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.1rem; color: var(--text); transition: 0.3s; }
         .pay-item:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 255, 255, 0.1); }
         .pay-bkash { color: #e11471; } .pay-nagad { color: #f37021; } .pay-rocket { color: #8c1515; }
-
         .reviewer-info { display: flex; align-items: center; gap: 15px; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;}
         .reviewer-info img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
-
         footer { text-align: center; padding: 2rem 5%; background: var(--card); border-top: 1px solid var(--border-color); color: var(--text-muted); }
 
         @media (max-width: 1024px) { 
             .nav-center { display: none; } 
             .menu-toggle { display: block; } 
             .brand-text { display: none; } 
-            
             #home { flex-direction: column; justify-content: center; text-align: center; padding-top: 120px; padding-bottom: 60px;}
             .hero-text { text-align: center; margin-bottom: 40px; }
             .hero-image { justify-content: center; }
@@ -508,7 +487,6 @@
         </div>
         
         <div class="os-wrapper">
-            
             <div class="os-mobile-head">
                 <button class="os-icon-btn" onclick="osToggle('left')">☰</button>
                 <div style="color:var(--os-accent); font-weight:bold;">◉ SUMONIX OS</div>
@@ -546,7 +524,6 @@
                         <div class="os-msg ai">
                             <strong>SUMONIX AI</strong><br><br>Secure Enterprise OS initialized. Ready for commands.
                         </div>
-                        
                         <div class="os-pipe" id="osPipe">
                             <h3><span style="animation: pulse 1.5s infinite;">◉</span> Executing...</h3>
                             <div class="os-pipe-step">
@@ -557,7 +534,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="os-in-wrap">
                         <div class="os-box">
                             <textarea id="osInput" rows="1" placeholder="[Chat Mode] Type command..."></textarea>
@@ -842,6 +818,16 @@
     </footer>
 
     <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function() {
+                navigator.serviceWorker.register("service-worker.js")
+                .then(res => console.log("SUMONIX AI App Ready for Installation!"))
+                .catch(err => console.log("PWA setup failed", err));
+            });
+        }
+    </script>
+
+    <script>
         function openMenu() { document.getElementById('sideMenu').classList.add('active'); document.getElementById('menuOverlay').classList.add('active'); }
         function closeMenu() { document.getElementById('sideMenu').classList.remove('active'); document.getElementById('menuOverlay').classList.remove('active'); }
 
@@ -950,18 +936,22 @@
             let fmn = document.getElementById('fm-n'); if(fmn) fmn.placeholder = d.fmN; let fme = document.getElementById('fm-e'); if(fme) fme.placeholder = d.fmE; let fmm = document.getElementById('fm-m'); if(fmm) fmm.placeholder = d.fmM; setTxt('fm-b', d.fmB);
         }
     </script>
-
+    
     <script>
         let osMode = 'Chat';
 
         setInterval(() => {
             const cpu = Math.floor(Math.random() * 20) + 5; 
-            document.getElementById('os-cpu').innerText = cpu + '%';
-            document.getElementById('os-cpu').style.color = cpu > 20 ? 'var(--os-warning)' : 'var(--os-accent)';
+            const osCpuEl = document.getElementById('os-cpu');
+            if(osCpuEl) {
+                osCpuEl.innerText = cpu + '%';
+                osCpuEl.style.color = cpu > 20 ? 'var(--os-warning)' : 'var(--os-accent)';
+            }
         }, 1500);
 
         function osLog(msg) {
             const terminal = document.getElementById('osTerm');
+            if(!terminal) return;
             const time = new Date().toLocaleTimeString('en-US', {hour12:false});
             terminal.innerHTML += `<div class="os-log"><span style="color:#8B949E; margin-right:8px;">[${time}]</span> ${msg}</div>`;
             terminal.scrollTop = terminal.scrollHeight;
@@ -969,7 +959,7 @@
 
         function osToggle(side) {
             const s = side === 'left' ? document.getElementById('osLeft') : document.getElementById('osRight');
-            s.classList.toggle('active');
+            if(s) s.classList.toggle('active');
         }
 
         function osSwitchView(vId, el) {
@@ -986,12 +976,14 @@
             document.querySelectorAll('.os-tab').forEach(e => e.classList.remove('active'));
             el.classList.add('active');
             osMode = mode;
-            document.getElementById('osInput').placeholder = `[${mode} Mode] Enter command...`;
+            const osInput = document.getElementById('osInput');
+            if(osInput) osInput.placeholder = `[${mode} Mode] Enter command...`;
             osLog(`OS context changed to: ${mode}`);
         }
 
         function osRun() {
             const input = document.getElementById('osInput');
+            if(!input) return;
             const txt = input.value.trim();
             if(!txt) return;
 
@@ -1031,17 +1023,10 @@
             setTimeout(runStep, 400);
         }
 
-        document.getElementById('osInput').addEventListener('keydown', e => {
-            if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); osRun(); }
-        });
-    </script>
-    
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", function() {
-                navigator.serviceWorker.register("service-worker.js")
-                .then(res => console.log("SUMONIX AI App Ready to Install!"))
-                .catch(err => console.log("PWA setup failed", err));
+        const osInputEl = document.getElementById('osInput');
+        if(osInputEl) {
+            osInputEl.addEventListener('keydown', e => {
+                if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); osRun(); }
             });
         }
     </script>
